@@ -1,0 +1,108 @@
+.chat-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+}
+
+.call-container {
+	position: absolute;
+	top: 100px;
+	background-color: #fff;
+	padding: 100px;
+	left: 100px;
+	box-shadow: 20px 20px 50px #000;
+	z-index: 999;
+
+	button {
+		background: #f33;
+		padding: 10px 20px;
+		color: #fff;
+		margin: 10px;
+	}
+
+	button:hover {
+		cursor: pointer;
+	}
+}
+.call-window {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 80vw;
+	height: 90vh;
+	opacity: 1;
+	z-index: 999;
+
+	&.active {
+		opacity: 1;
+		z-index: auto;
+
+		.video-control {
+			z-index: auto;
+		}
+	}
+
+	.video-control {
+		position: absolute;
+		bottom: 20px;
+		height: 72px;
+		width: 100%;
+		text-align: center;
+		opacity: 0;
+		z-index: -1;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	video {
+		position: absolute;
+	}
+
+	#localVideo {
+		bottom: 0;
+		right: 0;
+		width: 20%;
+		height: 20%;
+	}
+
+	#peerVideo {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.video-control,
+.call-modal {
+	.btn-action {
+		height: 50px;
+		height: 50px;
+		width: 50px;
+		line-height: 2px;
+		margin: 0px 8px;
+		font-size: 1.4em;
+		text-align: center;
+		border-radius: 50%;
+		cursor: pointer;
+		transition-duration: 0.25s;
+
+		&:hover {
+			opacity: 0.8;
+		}
+
+		&.hangup {
+			background-color: #f33;
+		}
+
+		&:not(.hangup) {
+			background-color: rgb(51, 71, 255);
+
+			&.disable {
+				background-color: #f33;
+			}
+		}
+	}
+}
