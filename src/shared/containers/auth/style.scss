@@ -1,38 +1,58 @@
 .auth-wrapper {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
+  background: #f1eeee;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    20px 20px 60px rgba(0, 0, 0, 0.55);
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0px 200px;
 
-	.form-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
-		position: relative;
-		padding: 30px 0px 20px 0px;
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    padding: 30px 0px 20px 0px;
+    width: 100%;
 
-		.title {
-			text-align: center;
-			margin: 0px 0px 40px 0px;
-			color: $brand-text;
-		}
+    form {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      padding: 0px 100px;
+    }
 
-		.inputs-container {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
+    .title {
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 40px;
+      line-height: 78px;
 
-		.info-container {
-			justify-content: center;
-			align-items: center;
-			display: flex;
-			text-align: center;
-			margin: 25px 0px 0px 0px;
-			font-weight: 500;
-		}
-	}
+      color: #3d5fc6;
+    }
+
+    .logo-image {
+      width: 150px;
+    }
+    .inputs-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .info-container {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      text-align: center;
+      margin: 25px 0px 0px 0px;
+      font-weight: 500;
+    }
+  }
 }

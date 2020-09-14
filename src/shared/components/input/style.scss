@@ -1,101 +1,109 @@
 .input-wrapper {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  padding-top: 0;
 
-	& > span {
-		margin-top: 5px;
-	}
+  & > span {
+    margin-top: 5px;
+  }
 
-	.input-container {
-		position: relative;
+  .input-container {
+    position: relative;
 
-		.input {
-			border: none;
-			height: 50px;
-			padding: 0px 20px 0px 20px;
-			font-size: 16px;
-			font-weight: 600;
-			width: 100%;
+    input:-internal-autofill-selected {
+      background-color: #ededed !important;
+    }
+    .input {
+      height: 50px;
+      padding: 0px 20px 0px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      background: #ededed;
+      box-shadow: inset 4px 4px 10px rgba(138, 133, 143, 0.25),
+        inset -3px -3px 14px #fbfbfb;
+      border-radius: 50px;
 
-			&::-ms-clear {
-				display: none;
-			}
+      &::-ms-clear {
+        display: none;
+      }
 
-			&.default {
-				background: $brand-secondary;
-				border-radius: 4px;
-				color: $brand-text;
+      &.default {
+        background: #ededed;
+        box-shadow: inset 4px 4px 10px rgba(138, 133, 143, 0.25),
+          inset -3px -3px 14px #fbfbfb;
+        border-radius: 50px;
+        border-color: transparent;
+        &::-webkit-input-placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
 
-				&::-webkit-input-placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
+        &:-moz-placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
 
-				&:-moz-placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
+        &::-moz-placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
 
-				&::-moz-placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
+        &:-ms-input-placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
 
-				&:-ms-input-placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
+        &::-ms-input-placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
 
-				&::-ms-input-placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
+        &::placeholder {
+          color: $brand-text;
+          font-weight: 400;
+        }
+      }
 
-				&::placeholder {
-					color: $brand-text;
-					font-weight: 400;
-				}
-			}
+      &.search {
+        border: none;
+        color: $brand-text-dark;
+        height: 40px;
+        padding: 0px 20px 0px 20px;
+      }
 
-			&.search {
-				background: $brand-tertiary;
-				color: $brand-text-dark;
-				height: 55px;
-				padding: 0px 40px 0px 60px;
-			}
+      &.clean {
+        border-radius: 0;
+      }
 
-			&.clean {
-				border-radius: 0;
-			}
+      &.input--error {
+        border: #dcb2b2 solid 2px;
+      }
+    }
 
-			&.input--error {
-				border: #dcb2b2 solid 2px;
-			}
-		}
+    .input-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      padding: 20px;
 
-		.input-icon-container {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			position: absolute;
-			top: 0;
-			height: 100%;
-			padding: 20px;
+      &.icon-right {
+        right: 0;
+      }
 
-			&.icon-right {
-				right: 0;
-			}
+      &.icon-left {
+        left: 0;
+      }
+    }
+  }
 
-			&.icon-left {
-				left: 0;
-			}
-		}
-	}
-
-	.input-label-container {
-		margin-top: 5px;
-	}
+  .input-label-container {
+    margin-top: 5px;
+  }
 }
