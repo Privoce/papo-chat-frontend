@@ -19,138 +19,134 @@ import * as videoCallActions from 'redux/actions/videoCall';
 import { instanceOf, string } from 'prop-types';
 
 class HomeEntry extends Component {
-	constructor() {
-		super();
-		this.state = {
-			clientId: '',
-			clientName: '',
-			callWindow: '',
-			callModal: '',
-			callFrom: '',
-			localSrc: null,
-			peerSrc: null,
-			started: false
-		};
-		this.pc = {};
-		this.config = null;
-		this.startCallHandler = this.startCall.bind(this);
-	}
+  constructor() {
+    super();
+    this.state = {
+      clientId: '',
+      clientName: '',
+      callWindow: '',
+      callModal: '',
+      callFrom: '',
+      localSrc: null,
+      peerSrc: null,
+      started: false
+    };
+    this.pc = {};
+    this.config = null;
+    this.startCallHandler = this.startCall.bind(this);
+  }
 
-	componentDidMount() {
-		const { socketActions } = this.props;
+  componentDidMount() {
+    const { socketActions } = this.props;
 
-		socketActions.startChannel();
-	}
+    socketActions.startChannel();
+  }
 
-	componentDidUpdate(prevProps, prevState, snapshot) {
-		const { videoCallData } = this.props;
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { videoCallData } = this.props;
 
-		console.log(videoCallData.user, 'updated');
+    console.log(videoCallData.user, 'updated');
 
-		if (!this.state.started && videoCallData.socket) {
-			videoCallData.socket.on('call', data => {
-				if (data.sdp) {
-					this.pc.setRemoteDescription(data.sdp);
-					if (data.sdp.type === 'offer') this.pc.createAnswer();
-				} else {
-					this.pc.addIceCandidate(data.candidate);
-				}
-			});
+    if (!this.state.started && videoCallData.socket) {
+      videoCallData.socket.on('call', data => {
+        if (data.sdp) {
+          this.pc.setRemoteDescription(data.sdp);
+          if (data.sdp.type === 'offer') this.pc.createAnswer();
+        } else {
+          this.pc.addIceCandidate(data.candidate);
+        }
+      });
 
-			this.setState({
-				started: true
-			});
-		}
-	}
+      this.setState({
+        started: true
+      });
+    }
+  }
 
-	startCall(isCaller, friendID, config) {
-		this.config = config;
-		this.pc = new PeerConnection(friendID)
-			.on('localStream', src => {
-				const newState = { callWindow: 'active', localSrc: src };
-				if (!isCaller) newState.callModal = '';
-				this.setState(newState);
-			})
-			.on('peerStream', src => {
-				this.setState({ peerSrc: src });
-			})
-			.start(isCaller, config, getUser());
-	}
+  startCall(isCaller, friendID, config) {
+    this.config = config;
+    this.pc = new PeerConnection(friendID)
+      .on('localStream', src => {
+        const newState = { callWindow: 'active', localSrc: src };
+        if (!isCaller) newState.callModal = '';
+        this.setState(newState);
+      })
+      .on('peerStream', src => {
+        this.setState({ peerSrc: src });
+      })
+      .start(isCaller, config, getUser());
+  }
 
-	handleCallStart = () => {
-		const { conversationData } = this.props;
-		const { currentPartnerIdConversation } = conversationData;
-		const config = { audio: true, video: true };
-		this.startCall(true, currentPartnerIdConversation, config);
-	};
+  handleCallStart = () => {
+    const { conversationData } = this.props;
+    const { currentPartnerIdConversation } = conversationData;
+    const config = { audio: true, video: true };
+    this.startCall(true, currentPartnerIdConversation, config);
+  };
 
-	handleAceptCall = () => {
-		const { conversationData } = this.props;
-		const { videoCallData } = this.props;
-		const { currentPartnerIdConversation } = conversationData;
-		const config = { audio: true, video: true };
+  handleAceptCall = () => {
+    const { conversationData } = this.props;
+    const { videoCallData } = this.props;
+    const { currentPartnerIdConversation } = conversationData;
+    const config = { audio: true, video: true };
 
-		this.startCall(false, videoCallData.user._id, config);
-		const { videoCallActions } = this.props;
+    this.startCall(false, videoCallData.user._id, config);
+    const { videoCallActions } = this.props;
 
-		videoCallActions.acceptedVideoCall();
-	};
+    videoCallActions.acceptedVideoCall();
+  };
 
-	handleCancelCall = () => {};
+  handleCancelCall = () => {};
 
-	render() {
-		const { videoCallData } = this.props;
-		const { calling, user } = videoCallData;
-		const { localSrc, peerSrc } = this.state;
+  render() {
+    const { videoCallData } = this.props;
+    const { calling, user } = videoCallData;
+    const { localSrc, peerSrc } = this.state;
 
-		return (
-			<>
-				<div className="chat-wrapper">
-					{calling && (
-						<div className="call-container">
-							<p>{user.nickname} tá te ligando</p>
-							<button onClick={this.handleAceptCall}>
-								aceitar
-							</button>
-							<button onClick={this.handleCancelCall}>
-								cancelar
-							</button>
-						</div>
-					)}
+    return (
+      <>
+        <div className="chat-wrapper">
+          {calling && (
+            <div className="call-container">
+              <p>{user.nickname} tá te ligando</p>
+              <button onClick={this.handleAceptCall}>aceitar</button>
+              <button onClick={this.handleCancelCall}>cancelar</button>
+            </div>
+          )}
 
-					<ActionsWrapper />
-					<ChatWrapper startCall={this.handleCallStart} />
-				</div>
-				{!_.isEmpty(this.config) && (
-					<CallWindowComponent
-						status="calling"
-						localSrc={localSrc}
-						peerSrc={peerSrc}
-						config={this.config}
-						mediaDevice={this.pc.mediaDevice}
-						endCall={this.endCallHandler}
-					/>
-				)}
-			</>
-		);
-	}
+          <ActionsWrapper />
+          <ChatWrapper startCall={this.handleCallStart} />
+        </div>
+        {!_.isEmpty(this.config) && (
+          <CallWindowComponent
+            status="calling"
+            localSrc={localSrc}
+            peerSrc={peerSrc}
+            config={this.config}
+            mediaDevice={this.pc.mediaDevice}
+            endCall={this.endCallHandler}
+          />
+        )}
+      </>
+    );
+  }
 }
 
 const mapDispatchToProps = dispatch => {
-	return {
-		socketActions: bindActionCreators(socketActions, dispatch),
-		videoCallActions: bindActionCreators(videoCallActions, dispatch)
-	};
+  return {
+    socketActions: bindActionCreators(socketActions, dispatch),
+    videoCallActions: bindActionCreators(videoCallActions, dispatch)
+  };
 };
 
 const mapStateToProps = state => {
-	return {
-		videoCallData: state.videoCall,
-		conversationData: state.conversation
-	};
+  return {
+    videoCallData: state.videoCall,
+    conversationData: state.conversation
+  };
 };
 
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(HomeEntry);

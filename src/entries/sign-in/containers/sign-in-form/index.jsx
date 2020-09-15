@@ -84,7 +84,7 @@ class SignInFormContainer extends Component {
               <ButtonComponent
                 type="submit"
                 primary
-                text={constants.LABELS.AUTH.SIGNUP}
+                text="Sign In"
                 isFetching={signIn.isFetching}
                 margin="24px 0px 0px 0px"
                 width={280}
