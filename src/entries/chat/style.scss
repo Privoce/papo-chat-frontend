@@ -10,24 +10,99 @@
   width: 80%;
 }
 
+.call-blur {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+
+.blur-cover {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  opacity: 0.5;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.19);
+  z-index: 888;
+}
+
 .call-container {
   position: absolute;
-  top: 100px;
-  background-color: #fff;
-  padding: 100px;
-  left: 100px;
-  box-shadow: 20px 20px 50px #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  width: 357px;
+  height: 337px;
+  background: #f1f1f1;
+  box-shadow: 20px 20px 40px rgba(133, 130, 137, 0.25);
+  border-radius: 50px;
   z-index: 999;
+  animation: pulse 2s infinite;
+
+  img {
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.36));
+  }
+
+  h2 {
+    color: #4064d1;
+    font-size: 19px;
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+    color: #4064d1;
+  }
+
+  .button-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
 
   button {
-    background: #f33;
-    padding: 10px 20px;
-    color: #fff;
-    margin: 10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 4px 4px 60px rgba(0, 0, 0, 0.25), -4px -4px 10px #ffffff;
+    font-size: 30px;
+    padding-top: 5px;
+    transition: all 0.4s ease-in-out;
   }
 
   button:hover {
     cursor: pointer;
+    font-size: 35px;
+  }
+
+  button:nth-child(1) {
+    color: rgb(48, 190, 35);
+  }
+
+  button:nth-child(1):hover {
+    background: rgb(48, 190, 35);
+    color: #fff;
+  }
+
+  button:nth-child(2) {
+    color: #f33;
+  }
+
+  button:nth-child(2):hover {
+    background: #f33;
+    color: #fff;
   }
 }
 .call-window {
@@ -108,5 +183,20 @@
         background-color: #f33;
       }
     }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(12, 206, 54, 0.4);
+    box-shadow: 0 0 0 0 rgba(76, 204, 44, 0.4);
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 20px rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 20px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
   }
 }

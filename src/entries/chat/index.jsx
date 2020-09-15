@@ -2,6 +2,7 @@
 /* eslint-disable no-alert */
 import React, { Component } from 'react';
 import _, { isEmpty } from 'lodash';
+import { MdCall, MdCallEnd } from 'react-icons/md';
 
 import { ActionsWrapper, ChatWrapper } from 'entries/chat/wrappers';
 import { CallWindowComponent } from 'shared/components';
@@ -17,6 +18,7 @@ import { getUser } from 'modules/utils';
 import * as socketActions from 'redux/actions/socket';
 import * as videoCallActions from 'redux/actions/videoCall';
 import { instanceOf, string } from 'prop-types';
+import profilePlaceholder from '../../assets/images/no-picture.png';
 
 class HomeEntry extends Component {
   constructor() {
@@ -105,15 +107,23 @@ class HomeEntry extends Component {
 
     return (
       <>
-        <div className="chat-wrapper">
-          {calling && (
-            <div className="call-container">
-              <p>{user.nickname} tá te ligando</p>
-              <button onClick={this.handleAceptCall}>aceitar</button>
-              <button onClick={this.handleCancelCall}>cancelar</button>
+        {calling && (
+          <div className="call-container">
+            <img src={profilePlaceholder} alt="User profile picture" />
+            <h2>{user.nickname}</h2>
+            <p>Is calling...</p>
+            <div className="button-container">
+              <button onClick={this.handleAceptCall}>
+                <MdCall />
+              </button>
+              <button onClick={this.handleCancelCall}>
+                <MdCallEnd />
+              </button>
             </div>
-          )}
-
+          </div>
+        )}
+        <div className={calling && 'blur-cover'} />
+        <div className={`chat-wrapper ${calling && 'call-blur'}`}>
           <ActionsWrapper />
           <ChatWrapper startCall={this.handleCallStart} />
         </div>
