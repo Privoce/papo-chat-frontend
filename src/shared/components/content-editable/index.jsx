@@ -1,49 +1,41 @@
-import React, {
-	Component
-} from 'react';
+import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 
-export default class ContentEditableComponent extends Component {
-	constructor(props) {
-		super(props);
-		this.contentEditable = React.createRef();
-	}
+function ContentEditableComponent({ onEnter, onFocus }) {
+  const contentEditable = useRef(null);
 
-	handleKeyDown = (event) => {
-		if (event.which === 13 && event.shiftKey === false) {
-			event.preventDefault();
-			this.handleEnter();
-			return false;
-		}
+  function handleEnter() {
+    onEnter(contentEditable.current.textContent);
+    contentEditable.current.textContent = '';
+  }
 
-		return true;
-	};
+  function handleKeyDown(event) {
+    if (event.which === 13 && event.shiftKey === false) {
+      event.preventDefault();
+      handleEnter();
+      return false;
+    }
 
-	handleEnter = () => {
-		const {
-			onEnter
-		} = this.props;
+    return true;
+  }
 
-		onEnter(this.contentEditable.current.textContent);
-		this.contentEditable.current.textContent = '';
-	}
-
-	render () {
-		const {
-			onFocus
-		} = this.props;
-
-		return (
-			<div
-				contentEditable
-				className='content-editable'
-				role='button'
-				spellCheck
-				ref={this.contentEditable}
-				onKeyDown={this.handleKeyDown}
-				onFocus={onFocus}
-				tabIndex='-1'
-			>
-			</div>
-		);
-	}
+  return (
+    <div
+      contentEditable
+      className="content-editable"
+      role="button"
+      spellCheck
+      ref={contentEditable}
+      onKeyDown={handleKeyDown}
+      onFocus={onFocus}
+      tabIndex="-1"
+    />
+  );
 }
+
+ContentEditableComponent.propTypes = {
+  onEnter: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
+};
+
+export default ContentEditableComponent;

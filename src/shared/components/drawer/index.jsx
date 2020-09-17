@@ -1,112 +1,73 @@
-import React, {
-	Component
-} from 'react';
+import React, { useEffect } from 'react';
 
-import {
-	IconComponent,
-	LabelComponent,
-	ButtonComponent
-} from 'shared/components';
-
-import {
-	connect
-} from 'react-redux';
-
-import {
-	bindActionCreators
-} from 'redux';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as drawerActions from 'redux/actions/drawer';
-import classNames from 'classnames';
+import ButtonComponent from 'shared/components/button';
+import IconComponent from 'shared/components/icon';
+import LabelComponent from 'shared/components/label';
 
-class DrawerComponent extends Component {
-	componentDidMount() {
-		const {
-			drawerActions,
-			drawerName
-		} = this.props;
+function DrawerComponent({ drawerName, children, title }) {
+  const dispatch = useDispatch();
+  const drawerData = useSelector((state) => state.drawer);
 
-		drawerActions.initDrawer(drawerName);
-	}
+  useEffect(() => {
+    dispatch(drawerActions.initDrawer(drawerName));
+  }, []);
 
-	handleGoBack = () => {
-		const {
-			drawerActions,
-			drawerName
-		} = this.props;
+  function handleGoBack() {
+    dispatch(drawerActions.closeDrawer(drawerName));
+  }
 
-		drawerActions.closeDrawer(drawerName);
-	}
+  const { isOpen } = drawerData[drawerName]
+    ? drawerData[drawerName]
+    : { isOpen: false };
 
-	render () {
-		const {
-			children,
-			title,
-			drawerData,
-			drawerName
-		} = this.props;
+  const drawerStyles = classNames({
+    drawer: true,
+    open: isOpen,
+  });
 
-		const {
-			isOpen
-		} = drawerData[drawerName] ? drawerData[drawerName] : { isOpen: false };
-
-		const drawerStyles = classNames({
-			drawer: true,
-			open: isOpen
-		});
-
-		return (
-			<div className={drawerStyles}>
-				{
-					isOpen ? (
-						<div className='drawer-container'>
-							<header className='header'>
-								<ButtonComponent
-									type='button'
-									width={26}
-									height={26}
-									link
-									onClick={this.handleGoBack}
-								>
-									<IconComponent
-										fill="#ffffff"
-										icon="arrow-left"
-										width={26}
-										height={26}
-									/>
-								</ButtonComponent>
-								<LabelComponent
-									fontSemiBold
-									defaultLabel
-									text={title}
-									fontSize={16}
-									margin="0px 0px 3px 15px"
-								/>
-							</header>
-							{
-								children
-							}
-						</div>
-					) : null
-				}
-			</div>
-		);
-	}
+  return (
+    <div className={drawerStyles}>
+      {isOpen ? (
+        <div className="drawer-container">
+          <header className="header">
+            <ButtonComponent
+              type="button"
+              width={26}
+              height={26}
+              link
+              onClick={handleGoBack}
+            >
+              <IconComponent
+                fill="#ffffff"
+                icon="arrow-left"
+                width={26}
+                height={26}
+              />
+            </ButtonComponent>
+            <LabelComponent
+              fontSemiBold
+              defaultLabel
+              text={title}
+              fontSize={16}
+              margin="0px 0px 3px 15px"
+            />
+          </header>
+          {children}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		drawerData: state.drawer
-	};
+DrawerComponent.propTypes = {
+  drawerName: PropTypes.string.isRequired,
+  children: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		drawerActions: bindActionCreators(drawerActions, dispatch)
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(DrawerComponent);
+export default DrawerComponent;

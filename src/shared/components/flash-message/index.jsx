@@ -1,85 +1,72 @@
-import React, {
-	Component
-} from 'react';
-
-import {
-	IconComponent,
-	ButtonComponent
-} from 'shared/components';
+import React, { useState } from 'react';
 
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
-export default class FlashMessageComponent extends Component {
-	constructor (props) {
-		super(props);
+import ButtonComponent from 'shared/components/button';
+import IconComponent from 'shared/components/icon';
 
-		this.state = {
-			isActive: true
-		};
-	}
+function FlashMessageComponent({
+  onClose,
+  width,
+  message,
+  margin,
+  error,
+  success,
+}) {
+  const [isActive, setIsActive] = useState(false);
 
-	handleClickClose = () => {
-		const {
-			onClose
-		} = this.props;
+  function handleClickClose() {
+    onClose();
+    setIsActive(false);
+  }
 
-		onClose();
+  const flashMessageStyles = classNames({
+    'flash-message-wrapper': true,
+    error,
+    success,
+    closed: !isActive,
+  });
 
-		this.setState({
-			isActive: false
-		});
-	}
-
-	render () {
-		const {
-			width,
-			message,
-			margin,
-			error,
-			success
-		} = this.props;
-
-		const {
-			isActive
-		} = this.state;
-
-		const flashMessageStyles = classNames({
-			'flash-message-wrapper': true,
-			error,
-			success,
-			closed: !isActive
-		});
-
-		return (
-			<div
-				className={flashMessageStyles}
-				style={{
-					maxWidth: width,
-					margin
-				}}
-			>
-				<span className='flash-message'>
-					{
-						message
-					}
-				</span>
-				<div className='button-container'>
-					<ButtonComponent
-						type='button'
-						width={26}
-						height={26}
-						link
-						onClick={this.handleClickClose}
-					>
-						<IconComponent
-							fill="#ffffff"
-							icon="close"
-							width={26}
-							height={26}
-						/>
-					</ButtonComponent>
-				</div>
-			</div>
-		);
-	}
+  return (
+    <div
+      className={flashMessageStyles}
+      style={{
+        maxWidth: width,
+        margin,
+      }}
+    >
+      <span className="flash-message">{message}</span>
+      <div className="button-container">
+        <ButtonComponent
+          type="button"
+          width={26}
+          height={26}
+          link
+          onClick={handleClickClose}
+        >
+          <IconComponent fill="#ffffff" icon="close" width={26} height={26} />
+        </ButtonComponent>
+      </div>
+    </div>
+  );
 }
+
+FlashMessageComponent.propTypes = {
+  onClose: PropTypes.func,
+  width: PropTypes.number,
+  message: PropTypes.string.isRequired,
+  margin: PropTypes.number,
+  error: PropTypes.string,
+  success: PropTypes.string,
+};
+
+FlashMessageComponent.defaultProps = {
+  onClose: () => {},
+  width: 0,
+  margin: 0,
+  error: '',
+  success: '',
+};
+
+export default FlashMessageComponent;

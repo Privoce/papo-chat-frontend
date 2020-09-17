@@ -1,156 +1,111 @@
-import React, {
-	Component
-} from 'react';
+/* eslint-disable react/forbid-prop-types */
+import React, { useState, useRef } from 'react';
 
-import {
-	ButtonComponent,
-	IconComponent,
-	LabelComponent
-} from 'shared/components';
-
-import {
-	Manager,
-	Reference,
-	Popper
-} from 'react-popper';
-
+import PropTypes from 'prop-types';
 import onClickOutside from 'react-onclickoutside';
+import { Manager, Reference, Popper } from 'react-popper';
 
-class DropDownMenuComponent extends Component {
-	constructor (props) {
-		super(props);
+import ButtonComponent from 'shared/components/button';
+import IconComponent from 'shared/components/icon';
+import LabelComponent from 'shared/components/label';
 
-		this.dropDownWrapper = React.createRef();
-		this.state = {
-			isOpen: false
-		};
-	}
+const DropDownMenuComponent = ({ onChange, options, icon, marginButton }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropDownWrapper = useRef(null);
 
-	handleClickOutside = (event) => {
-		const {
-			isOpen
-		} = this.state;
+  function changeDropDownStatus(toggle, newIsOpen) {
+    const isOpenState = toggle ? !isOpen : newIsOpen;
 
-		if (this.dropDownWrapper.current) {
-			if (!this.dropDownWrapper.current.contains(event.target)) {
-				if (isOpen) {
-					this.changeDropDownStatus(false, false);
-				}
-			}
-		}
-	};
+    if (onChange) {
+      onChange(isOpenState);
+    }
 
-	changeDropDownStatus = (toggle, newIsOpen) => {
-		const {
-			onChange
-		} = this.props;
+    setIsOpen(isOpenState);
+  }
 
-		const {
-			isOpen
-		} = this.state;
+  DropDownMenuComponent.handleClickOutside = (event) => {
+    if (dropDownWrapper.current) {
+      if (!dropDownWrapper.current.contains(event.target)) {
+        if (isOpen) {
+          changeDropDownStatus(false, false);
+        }
+      }
+    }
+  };
 
-		const isOpenState = toggle ? (!isOpen) : (newIsOpen);
+  return (
+    <div ref={dropDownWrapper} className="drop-down-menu-wrapper">
+      <Manager>
+        <Reference>
+          {({ ref }) => (
+            <ButtonComponent
+              type="button"
+              width={icon.width}
+              height={icon.height}
+              margin={marginButton}
+              link
+              setRef={ref}
+              onClick={() => {
+                changeDropDownStatus(true);
+              }}
+            >
+              <IconComponent {...icon} />
+            </ButtonComponent>
+          )}
+        </Reference>
+        {isOpen && (
+          <Popper placement="bottom-end">
+            {({ ref, style, placement }) => (
+              <div className="drop-down-menu fadeIn" style={style} ref={ref}>
+                <div className="drop-down-container" data-placement={placement}>
+                  <ul>
+                    {options.map((item, index) => (
+                      <li key={`alora-${index + 1}`}>
+                        <ButtonComponent
+                          link
+                          onClick={() => {
+                            changeDropDownStatus(false, false);
+                            item.event();
+                          }}
+                        >
+                          <LabelComponent
+                            regular
+                            dark
+                            breakWord
+                            alignCenter
+                            text={item.text}
+                            fontSize={14}
+                          />
+                        </ButtonComponent>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </Popper>
+        )}
+      </Manager>
+    </div>
+  );
+};
 
-		if (onChange) {
-			onChange(isOpenState);
-		}
+const clickOutsideConfig = {
+  handleClickOutside: () => DropDownMenuComponent.handleClickOutside,
+};
 
-		this.setState({
-			isOpen: isOpenState
-		});
-	}
+DropDownMenuComponent.propTypes = {
+  status: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  icon: PropTypes.object,
+  marginButton: PropTypes.number,
+};
 
-	render () {
-		const {
-			isOpen,
-		} = this.state;
+DropDownMenuComponent.defaultProps = {
+  options: [],
+  icon: {},
+  marginButton: 0,
+};
 
-		const {
-			options,
-			icon,
-			marginButton
-		} = this.props;
-
-		return (
-			<div
-				ref={this.dropDownWrapper}
-				className='drop-down-menu-wrapper'
-			>
-				<Manager>
-					<Reference>
-						{({ ref }) => (
-							<ButtonComponent
-								type='button'
-								width={icon.width}
-								height={icon.height}
-								margin={marginButton}
-								link
-								setRef={ref}
-								onClick={() => {
-									this.changeDropDownStatus(true);
-								}}
-							>
-								<IconComponent
-									{
-									...icon
-									}
-								/>
-							</ButtonComponent>
-						)}
-					</Reference>
-					{
-						isOpen && (
-							<Popper
-								placement="bottom-end"
-							>
-								{({
-									ref,
-									style,
-									placement
-								}) => (
-									<div
-										className='drop-down-menu fadeIn'
-										style={style}
-										ref={ref}
-									>
-										<div
-											className='drop-down-container'
-											data-placement={placement}
-										>
-											<ul>
-												{
-													options.map((item, index) => (
-														<li key={index}>
-															<ButtonComponent
-																link
-																onClick={() => {
-																	this.changeDropDownStatus(false, false);
-																	item.event();
-																}}
-															>
-																<LabelComponent
-																	regular
-																	dark
-																	breakWord
-																	alignCenter
-																	text={item.text}
-																	fontSize={14}
-																/>
-															</ButtonComponent>
-														</li>
-													))
-												}
-											</ul>
-										</div>
-									</div>
-								)}
-							</Popper>
-						)
-					}
-				</Manager>
-			</div>
-		);
-	}
-}
-
-export default onClickOutside(DropDownMenuComponent);
+export default onClickOutside(DropDownMenuComponent, clickOutsideConfig);

@@ -1,53 +1,37 @@
-import React, {
-	Component
-} from 'react';
-
+import React from 'react';
 import classNames from 'classnames';
 
-export default class LoadingComponent extends Component {
-	renderSpinner = () => {
-		return (
-			<div className="spinner">
-				<div className="rect1"></div>
-				<div className="rect2"></div>
-				<div className="rect3"></div>
-				<div className="rect4"></div>
-			</div>
-		);
-	}
+function LoadingComponent({ defaultLoading, type }) {
+  function renderSpinner() {
+    return (
+      <div className="spinner">
+        <div className="rect1" />
+        <div className="rect2" />
+        <div className="rect3" />
+        <div className="rect4" />
+      </div>
+    );
+  }
 
-	renderDotnut = () => {
-		const {
-			defaultLoading
-		} = this.props;
+  function renderDotnut() {
+    const dotnutStyles = classNames({
+      donut: true,
+      default: defaultLoading,
+    });
 
-		const dotnutStyles = classNames({
-			donut: true,
-			default: defaultLoading
-		});
+    return <div className={dotnutStyles} />;
+  }
 
-		return (
-			<div
-				className={dotnutStyles}
-			>
-			</div>
-		);
-	}
+  switch (type) {
+    case 'donut':
+      return renderDotnut();
 
-	render () {
-		const {
-			type
-		} = this.props;
+    case 'spinner':
+      return renderSpinner();
 
-		switch (type) {
-			case 'donut':
-				return this.renderDotnut();
-
-			case 'spinner':
-				return this.renderSpinner();
-
-			default:
-				return this.renderSpinner();
-		}
-	}
+    default:
+      return renderSpinner();
+  }
 }
+
+export default LoadingComponent;
