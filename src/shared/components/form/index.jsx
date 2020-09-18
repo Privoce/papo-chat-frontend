@@ -1,185 +1,173 @@
-import React, { Component } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 
-import { connect } from 'react-redux';
-
-import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
 
 import * as formActions from 'redux/actions/form';
-import _ from 'lodash';
 
-class FormComponent extends Component {
-  constructor(props) {
-    super(props);
+function FormComponent({
+  values,
+  formName,
+  debounceValidation,
+  validateAsync,
+  validate,
+  render,
+  handleSubmit: formHandleSubmit,
+}) {
+  const [debounces, setDebounces] = useState();
 
-    this.state = {
-      handleChange: this.handleChange,
-      handleFocus: this.handleFocus,
-      handleBlur: this.handleBlur,
-      handleSubmit: this.handleSubmit,
-      debounces: this.createDebounces()
-    };
+  const formData = useSelector((state) => state.form);
+
+  const dispatch = useDispatch();
+
+  function getFormData() {
+    return formData[formName];
+  }
+  function updateFormData(params) {
+    dispatch(
+      formActions.updateForm(formName, {
+        ...params,
+      })
+    );
   }
 
-  componentDidMount() {
-    const { formActions, values, formName } = this.props;
+  function validateForm(resetErrors, keys) {
+    const formDataTemp = getFormData();
 
-    formActions.initForm(formName, {
-      values,
-      errors: {},
-      touched: {}
+    const { values: valuesFormData, errors: errorsFormData } = formDataTemp;
+
+    updateFormData({
+      errors: validate
+        ? validate(valuesFormData, errorsFormData, resetErrors, keys)
+        : {},
     });
   }
 
-  createDebounces = () => {
-    const debounces = {};
-    const { debounceValidation } = this.props;
+  function handleDebounceValidation(key, value) {
+    const formDataTemp = getFormData();
 
-    _.mapKeys(debounceValidation, (value, key) => {
-      debounces[key] = _.debounce(this.handleDebounceValidation, value);
-    });
-
-    return debounces;
-  };
-
-  handleDebounceValidation = (key, value) => {
-    const formData = this.getFormData();
-    const { errors } = formData;
-    const { validateAsync } = this.props;
-    const { formName } = this.props;
+    const { errors } = formDataTemp;
 
     if (!errors[key]) {
       validateAsync(key, value, formName);
-      this.validateForm(true, [key]);
+      validateForm(true, [key]);
     }
-  };
+  }
 
-  getFormData = () => {
-    const { formData, formName } = this.props;
+  function createDebounces() {
+    const debouncesTemp = {};
 
-    return formData[formName];
-  };
-
-  updateFormData = params => {
-    const { formActions, formName } = this.props;
-
-    formActions.updateForm(formName, {
-      ...params
+    _.mapKeys(debounceValidation, (value, key) => {
+      debouncesTemp[key] = _.debounce(handleDebounceValidation, value);
     });
-  };
 
-  validateForm = (resetErrors, keys) => {
-    const formData = this.getFormData();
+    return debouncesTemp;
+  }
 
-    const { validate } = this.props;
+  function setTouched(keys) {
+    const formDataTemp = getFormData();
+    const { touched } = formDataTemp;
 
-    const { values, errors } = formData;
-
-    this.updateFormData({
-      errors: validate ? validate(values, errors, resetErrors, keys) : {}
-    });
-  };
-
-  setTouched = keys => {
-    const formData = this.getFormData();
-    const { touched } = formData;
-
-    keys.forEach(key => {
+    keys.forEach((key) => {
       touched[key] = true;
     });
 
-    this.updateFormData({
-      touched
+    updateFormData({
+      touched,
     });
-  };
+  }
 
-  getMyFormParams = () => {
-    const myFormParams = this.getFormData() || {
+  function getMyFormParams() {
+    const myFormParams = getFormData() || {
       values: {},
       errors: {},
-      touched: {}
+      touched: {},
     };
 
     return myFormParams;
-  };
+  }
 
-  handleChange = event => {
+  function handleChange(event) {
     event.preventDefault();
 
     const { name: key, value } = event.target;
 
-    const { debounces } = this.state;
-
-    const formData = this.getFormData();
+    const formDataTemp = getFormData();
     const debounce = debounces[key];
-    const { values } = formData;
+    const { values: valuesFormData } = formDataTemp;
 
-    values[key] = value;
+    valuesFormData[key] = value;
 
-    this.updateFormData({
-      values
+    updateFormData({
+      values: valuesFormData,
     });
-    this.setTouched([key]);
-    this.validateForm(true, [key]);
+    setTouched([key]);
+    validateForm(true, [key]);
 
     if (debounce) {
       debounce(key, value);
     }
-  };
+  }
 
-  handleFocus = event => {
+  function handleFocus(event) {
     event.preventDefault();
     const { name: key } = event.target;
 
-    this.validateForm(false, [key]);
-  };
+    validateForm(false, [key]);
+  }
 
-  handleBlur = event => {
+  function handleBlur(event) {
     event.preventDefault();
 
     const { name: key } = event.target;
 
-    this.setTouched([key]);
-    this.validateForm(false, [key]);
-  };
+    setTouched([key]);
+    validateForm(false, [key]);
+  }
 
-  handleSubmit = event => {
+  function handleSubmit(event) {
     event.preventDefault();
 
-    const formData = this.getFormData();
-    const { values, errors } = formData;
+    const formDataTemp = getFormData();
+    const { values: valuesFormData, errors } = formDataTemp;
 
-    const { handleSubmit, formName } = this.props;
-
-    this.validateForm(false, _.keys(values));
-    this.setTouched(_.keys(values));
+    validateForm(false, _.keys(valuesFormData));
+    setTouched(_.keys(valuesFormData));
 
     if (_.isEmpty(errors)) {
-      handleSubmit(values, formName);
+      formHandleSubmit(valuesFormData, formName);
     }
-  };
-
-  render() {
-    const myFormParams = this.getMyFormParams();
-
-    const { render } = this.props;
-
-    return <>{render({ ...this.state, form: { ...myFormParams } })}</>;
   }
+
+  const myFormParams = getMyFormParams();
+
+  useEffect(() => {
+    dispatch(
+      formActions.initForm(formName, {
+        values,
+        errors: {},
+        touched: {},
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    setDebounces(createDebounces());
+  }, [formData]);
+
+  return (
+    <>
+      {render({
+        handleBlur,
+        handleChange,
+        handleFocus,
+        handleSubmit,
+        debounces,
+        form: { ...myFormParams },
+      })}
+    </>
+  );
 }
 
-const mapStateToProps = state => {
-  return {
-    formData: state.form
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    formActions: bindActionCreators(formActions, dispatch)
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FormComponent);
+export default FormComponent;

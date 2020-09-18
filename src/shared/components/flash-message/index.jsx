@@ -14,7 +14,7 @@ function FlashMessageComponent({
   error,
   success,
 }) {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
 
   function handleClickClose() {
     onClose();
@@ -54,7 +54,7 @@ function FlashMessageComponent({
 
 FlashMessageComponent.propTypes = {
   onClose: PropTypes.func,
-  width: PropTypes.number,
+  width: PropTypes.string,
   message: PropTypes.string.isRequired,
   margin: PropTypes.number,
   error: PropTypes.string,
@@ -63,7 +63,7 @@ FlashMessageComponent.propTypes = {
 
 FlashMessageComponent.defaultProps = {
   onClose: () => {},
-  width: 0,
+  width: '0',
   margin: 0,
   error: '',
   success: '',

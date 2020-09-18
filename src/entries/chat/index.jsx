@@ -31,7 +31,7 @@ class HomeEntry extends Component {
       callFrom: '',
       localSrc: null,
       peerSrc: null,
-      started: false
+      started: false,
     };
     this.pc = {};
     this.config = null;
@@ -49,8 +49,12 @@ class HomeEntry extends Component {
 
     console.log(videoCallData.user, 'updated');
 
-    if (!this.state.started && videoCallData.socket) {
-      videoCallData.socket.on('call', data => {
+    if (
+      !this.state.started &&
+      videoCallData.socket &&
+      videoCallData.socket.on
+    ) {
+      videoCallData.socket.on('call', (data) => {
         if (data.sdp) {
           this.pc.setRemoteDescription(data.sdp);
           if (data.sdp.type === 'offer') this.pc.createAnswer();
@@ -60,7 +64,7 @@ class HomeEntry extends Component {
       });
 
       this.setState({
-        started: true
+        started: true,
       });
     }
   }
@@ -68,12 +72,12 @@ class HomeEntry extends Component {
   startCall(isCaller, friendID, config) {
     this.config = config;
     this.pc = new PeerConnection(friendID)
-      .on('localStream', src => {
+      .on('localStream', (src) => {
         const newState = { callWindow: 'active', localSrc: src };
         if (!isCaller) newState.callModal = '';
         this.setState(newState);
       })
-      .on('peerStream', src => {
+      .on('peerStream', (src) => {
         this.setState({ peerSrc: src });
       })
       .start(isCaller, config, getUser());
@@ -142,21 +146,18 @@ class HomeEntry extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     socketActions: bindActionCreators(socketActions, dispatch),
-    videoCallActions: bindActionCreators(videoCallActions, dispatch)
+    videoCallActions: bindActionCreators(videoCallActions, dispatch),
   };
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     videoCallData: state.videoCall,
-    conversationData: state.conversation
+    conversationData: state.conversation,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomeEntry);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeEntry);
