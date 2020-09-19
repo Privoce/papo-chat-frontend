@@ -47,7 +47,7 @@
     }
   },
   "API": {
-    "ROOT": "http://localhost:5000",
+    "ROOT": "https://alora-chat-backend.herokuapp.com",
     "ACTIONS": {
       "AUTH_SIGNUP": "/auth/signup",
       "AUTH_SIGNIN": "/auth/signin",
