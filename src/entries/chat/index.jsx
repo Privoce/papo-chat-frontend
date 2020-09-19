@@ -1,7 +1,7 @@
 /* eslint-disable react/sort-comp */
 /* eslint-disable no-alert */
 import React, { Component } from 'react';
-import _, { isEmpty } from 'lodash';
+import _ from 'lodash';
 import { MdCall, MdCallEnd } from 'react-icons/md';
 
 import { ActionsWrapper, ChatWrapper } from 'entries/chat/wrappers';
@@ -17,7 +17,6 @@ import { getUser } from 'modules/utils';
 
 import * as socketActions from 'redux/actions/socket';
 import * as videoCallActions from 'redux/actions/videoCall';
-import { instanceOf, string } from 'prop-types';
 import profilePlaceholder from '../../assets/images/no-picture.png';
 
 class HomeEntry extends Component {
@@ -44,7 +43,7 @@ class HomeEntry extends Component {
     socketActions.startChannel();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate() {
     const { videoCallData } = this.props;
 
     console.log(videoCallData.user, 'updated');
@@ -91,9 +90,7 @@ class HomeEntry extends Component {
   };
 
   handleAceptCall = () => {
-    const { conversationData } = this.props;
     const { videoCallData } = this.props;
-    const { currentPartnerIdConversation } = conversationData;
     const config = { audio: true, video: true };
 
     this.startCall(false, videoCallData.user._id, config);
