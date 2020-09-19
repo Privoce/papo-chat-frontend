@@ -1,49 +1,40 @@
-import React, {
-	Component
-} from 'react';
-
-import {
-	LabelComponent
-} from 'shared/components';
-
-import {
-	createAcronym
-} from 'modules/utils';
+import React from 'react';
 
 import classNames from 'classnames';
 
-export default class ProfilePictureComponent extends Component {
-	render () {
-		const {
-			color,
-			backgroundColor,
-			label,
-			width,
-			height,
-			labelFontSize,
-		} = this.props;
+import { createAcronym } from 'modules/utils';
+import LabelComponent from 'shared/components/label';
 
-		const profilePictureStyles = classNames({
-			'profile-picture': true,
-			fadeIn: true
-		});
+function ProfilePictureComponent({
+  color,
+  backgroundColor,
+  label,
+  width,
+  height,
+  labelFontSize,
+}) {
+  const profilePictureStyles = classNames({
+    'profile-picture': true,
+    fadeIn: true,
+  });
 
-		return (
-			<div
-				className={profilePictureStyles}
-				style={{
-					backgroundColor,
-					color,
-					width,
-					height
-				}}
-			>
-				<LabelComponent
-					fontBold
-					text={createAcronym(label)}
-					fontSize={labelFontSize}
-				/>
-			</div>
-		);
-	}
+  return (
+    <div
+      className={profilePictureStyles}
+      style={{
+        backgroundColor,
+        color,
+        width,
+        height,
+      }}
+    >
+      <LabelComponent
+        fontBold
+        text={createAcronym(label)}
+        fontSize={labelFontSize}
+      />
+    </div>
+  );
 }
+
+export default ProfilePictureComponent;

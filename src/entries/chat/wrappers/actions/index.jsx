@@ -1,351 +1,261 @@
-import React, {
-	Component
-} from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-underscore-dangle */
+import React, { useEffect, useState } from 'react';
+
+import { confirmAlert } from 'react-confirm-alert';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
-	IconComponent,
-	ButtonComponent,
-	DrawerComponent,
-	DropDownMenuComponent,
-	LabelComponent
+  UserInfoComponent,
+  InputSearchComponent,
+} from 'entries/chat/components';
+import {
+  ConversationsList,
+  AddContactDrawer,
+  StartConversationDrawer,
+} from 'entries/chat/containers';
+import constants from 'modules/constants';
+import {
+  logout,
+  searchParam,
+  getUser,
+  setConversationLastMessageDateTime,
+} from 'modules/utils';
+import * as contactActions from 'redux/actions/contact';
+import * as conversationActions from 'redux/actions/conversation';
+import * as drawerActions from 'redux/actions/drawer';
+import {
+  IconComponent,
+  ButtonComponent,
+  DrawerComponent,
+  DropDownMenuComponent,
+  LabelComponent,
 } from 'shared/components';
 
-import {
-	ConversationsList,
-	AddContactDrawer,
-	StartConversationDrawer
-} from 'entries/chat/containers';
+function ActionsWrapper() {
+  const [conversationsSearch, setConversationsSearch] = useState({
+    nickname: '',
+  });
+  const dispatch = useDispatch();
+  const conversationData = useSelector((state) => state.conversation);
 
-import {
-	UserInfoComponent,
-	InputSearchComponent
-} from 'entries/chat/components';
+  useEffect(() => {
+    dispatch(conversationActions.getConversations());
+  }, []);
 
-import {
-	logout,
-	searchParam,
-	getUser,
-	setConversationLastMessageDateTime
-} from 'modules/utils';
+  function openDrawer(drawerName) {
+    dispatch(contactActions.resetAddContact());
+    dispatch(drawerActions.openDrawer(drawerName));
+  }
 
-import {
-	connect
-} from 'react-redux';
+  function handleOpenAddContact() {
+    contactActions.resetAddContact();
+    openDrawer('addContact');
+  }
 
-import {
-	bindActionCreators
-} from 'redux';
+  function handleOpenNewConversation() {
+    openDrawer('newConversation');
+  }
 
-import {
-	confirmAlert
-} from 'react-confirm-alert';
+  function handleLogout() {
+    logout();
+  }
 
-import * as contactActions from 'redux/actions/contact';
-import * as drawerActions from 'redux/actions/drawer';
-import * as conversationActions from 'redux/actions/conversation';
-import constants from 'modules/constants';
+  function handleChangeSearch(value) {
+    setConversationsSearch({ nickname: value });
+  }
 
-class ActionsWrapper extends Component {
-	constructor (props) {
-		super(props);
-		this.state = {
-			conversationsSearch: {
-				nickname: ''
-			}
-		};
-	}
+  function conversationListToComponentData(conversations) {
+    const { currentPartnerIdConversation } = conversationData;
 
-	componentDidMount () {
-		const {
-			conversationActions
-		} = this.props;
+    const { deleteConversation } = conversationData;
 
-		conversationActions.getConversations();
-	}
+    return conversations.map((item) => {
+      const { nickname, profileColor, _id } = item.partnerId;
 
-	handleOpenAddContact = () => {
-		const {
-			contactActions
-		} = this.props;
+      const { unreadMessages, _id: conversationId } = item;
 
-		contactActions.resetAddContact();
-		this.openDrawer('addContact');
-	}
+      const lastMessage = item.messages[item.messages.length - 1];
 
-	handleOpenNewConversation = () => {
-		this.openDrawer('newConversation');
-	}
+      return {
+        nickname,
+        profileColor,
+        _id,
+        conversationId,
+        desc: lastMessage ? lastMessage.message : '',
+        rightLabel: lastMessage
+          ? setConversationLastMessageDateTime(lastMessage.dateTime)
+          : '',
+        unreadMessages,
+        active:
+          String(item.partnerId._id) === String(currentPartnerIdConversation),
+        isFetchingAction:
+          deleteConversation.isFetching &&
+          String(deleteConversation.currentPartnerIdIsDeleting) === _id,
+      };
+    });
+  }
 
-	openDrawer = (drawerName) => {
-		const {
-			contactActions,
-			drawerActions
-		} = this.props;
+  function handleClickConversationItem(item) {
+    dispatch(
+      conversationActions.setCurrentConversation({
+        partner: item,
+      })
+    );
+  }
 
-		contactActions.resetAddContact();
-		drawerActions.openDrawer(drawerName);
-	}
+  function handleDeleteConversation(item) {
+    const { _id } = item;
 
-	handleLogout = () => {
-		logout();
-	}
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="confirm-popup">
+            <LabelComponent
+              fontSemiBold
+              text={constants.LABELS.CHAT.DELETE_CHAT_CONFIRM}
+              fontSize={30}
+              alignCenter
+              margin="0px 0px 25px 0px"
+            />
+            <div className="buttons-container">
+              <ButtonComponent
+                type="button"
+                defaultButton
+                small
+                outline
+                text={constants.LABELS.MAIN.NO}
+                margin="10px"
+                width={100}
+                onClick={onClose}
+              />
+              <ButtonComponent
+                type="button"
+                defaultButton
+                small
+                outline
+                text={constants.LABELS.MAIN.YES}
+                margin="10px"
+                width={100}
+                onClick={() => {
+                  dispatch(
+                    conversationActions.deleteConversation({
+                      partnerId: _id,
+                    })
+                  );
+                  onClose();
+                }}
+              />
+            </div>
+          </div>
+        );
+      },
+    });
+  }
 
-	handleChangeSearch = (value) => {
-		this.setState({
-			conversationsSearch: {
-				nickname: value
-			}
-		});
-	}
+  const currentUser = getUser() || {};
 
-	conversationListToComponentData = (conversations) => {
-		const {
-			conversationData
-		} = this.props;
+  const { isFetching, result } = conversationData;
 
-		const {
-			currentPartnerIdConversation
-		} = conversationData;
+  const { profileColor, nickname } = currentUser;
 
-		const {
-			deleteConversation
-		} = conversationData;
+  const conversations = conversationListToComponentData(result);
+  const items = searchParam(conversations, conversationsSearch);
 
-		return conversations.map((item) => {
-			const {
-				nickname,
-				profileColor,
-				_id
-			} = item.partnerId;
-
-			const {
-				unreadMessages,
-				_id: conversationId
-			} = item;
-
-			const lastMessage = item.messages[item.messages.length - 1];
-
-			return {
-				nickname,
-				profileColor,
-				_id,
-				conversationId,
-				desc: lastMessage ? lastMessage.message : '',
-				rightLabel: lastMessage ? setConversationLastMessageDateTime(lastMessage.dateTime) : '',
-				unreadMessages,
-				active: String(item.partnerId._id) === String(currentPartnerIdConversation),
-				isFetchingAction: (
-					deleteConversation.isFetching
-					&& String(deleteConversation.currentPartnerIdIsDeleting) === _id
-				)
-			};
-		});
-	}
-
-	handleClickConversationItem = (item) => {
-		const {
-			conversationActions
-		} = this.props;
-
-		conversationActions.setCurrentConversation({
-			partner: item
-		});
-	}
-
-	handleDeleteConversation = (item) => {
-		const {
-			conversationActions
-		} = this.props;
-
-		const {
-			_id
-		} = item;
-
-		confirmAlert({
-			customUI: ({ onClose }) => {
-				return (
-					<div className='confirm-popup'>
-						<LabelComponent
-							fontSemiBold
-							text={constants.LABELS.CHAT.DELETE_CHAT_CONFIRM}
-							fontSize={30}
-							alignCenter
-							margin="0px 0px 25px 0px"
-						/>
-						<div className='buttons-container'>
-							<ButtonComponent
-								type="button"
-								defaultButton
-								small
-								outline
-								text={constants.LABELS.MAIN.NO}
-								margin="10px"
-								width={100}
-								onClick={onClose}
-							/>
-							<ButtonComponent
-								type="button"
-								defaultButton
-								small
-								outline
-								text={constants.LABELS.MAIN.YES}
-								margin="10px"
-								width={100}
-								onClick={() => {
-									conversationActions.deleteConversation({
-										partnerId: _id
-									});
-									onClose();
-								}}
-							/>
-						</div>
-					</div>
-				);
-			}
-		});
-	}
-
-	render () {
-		const currentUser = getUser() || {};
-
-		const {
-			conversationsSearch
-		} = this.state;
-
-		const {
-			conversationData
-		} = this.props;
-
-		const {
-			isFetching,
-			result
-		} = conversationData;
-
-		const {
-			profileColor,
-			nickname
-		} = currentUser;
-
-		const conversations = this.conversationListToComponentData(result);
-		const items = searchParam(conversations, conversationsSearch);
-
-		return (
-			<div className='actions-wrapper'>
-				<header className='header-container'>
-					<div className='header-content'>
-						<UserInfoComponent
-							isFetching={false}
-							column
-							profile={{
-								label: nickname,
-								width: 60,
-								height: 60,
-								backgroundColor: profileColor,
-								color: 'white',
-								labelFontSize: 16
-							}}
-							title={{
-								text: nickname,
-								fontSize: 16,
-								margin: '10px 0px 0px 0px'
-							}}
-						/>
-						<div>
-							<ButtonComponent
-								type='button'
-								width={26}
-								height={26}
-								link
-								onClick={this.handleOpenAddContact}
-							>
-								<IconComponent
-									fill="#555657"
-									icon="account-plus"
-									width={26}
-									height={26}
-								/>
-							</ButtonComponent>
-							<ButtonComponent
-								type='button'
-								width={26}
-								height={26}
-								margin="0px 0px 0px 20px"
-								link
-								onClick={this.handleOpenNewConversation}
-							>
-								<IconComponent
-									fill="#555657"
-									icon="message-text"
-									width={26}
-									height={26}
-								/>
-							</ButtonComponent>
-							<DropDownMenuComponent
-								options={[
-									{
-										text: constants.LABELS.CHAT.LOGOUT,
-										event: this.handleLogout
-									}
-								]}
-								icon={{
-									fill: '#555657',
-									icon: 'dots-vertical',
-									width: 26,
-									height: 26
-								}}
-								marginButton='0px 0px 0px 20px'
-							/>
-						</div>
-					</div>
-				</header>
-				<div>
-					<InputSearchComponent
-						handleChange={this.handleChangeSearch}
-					/>
-				</div>
-				<ConversationsList
-					items={items}
-					isFetching={isFetching}
-					emptyMessage={constants.LABELS.CHAT.NO_CONVERSATIONS_TO_SHOW}
-					onClickItem={this.handleClickConversationItem}
-					onDeleteItem={this.handleDeleteConversation}
-					deleteDropDownMessage={constants.LABELS.CHAT.DELETE_CHAT}
-				/>
-				<DrawerComponent
-					drawerName='addContact'
-					title={constants.LABELS.CHAT.ADD_CONTACT}
-				>
-					<AddContactDrawer />
-				</DrawerComponent>
-				<DrawerComponent
-					drawerName='newConversation'
-					title={constants.LABELS.CHAT.NEW_CONVERSATION}
-				>
-					<StartConversationDrawer
-						drawerName='newConversation'
-					/>
-				</DrawerComponent>
-			</div>
-		);
-	}
+  return (
+    <div className="actions-wrapper">
+      <header className="header-container">
+        <div className="header-content">
+          <UserInfoComponent
+            isFetching={false}
+            column
+            profile={{
+              label: nickname,
+              width: 60,
+              height: 60,
+              backgroundColor: profileColor,
+              color: 'white',
+              labelFontSize: 16,
+            }}
+            title={{
+              text: nickname,
+              fontSize: 16,
+              margin: '10px 0px 0px 0px',
+            }}
+          />
+          <div>
+            <ButtonComponent
+              type="button"
+              width={26}
+              height={26}
+              link
+              onClick={handleOpenAddContact}
+            >
+              <IconComponent
+                fill="#555657"
+                icon="account-plus"
+                width={26}
+                height={26}
+              />
+            </ButtonComponent>
+            <ButtonComponent
+              type="button"
+              width={26}
+              height={26}
+              margin="0px 0px 0px 20px"
+              link
+              onClick={handleOpenNewConversation}
+            >
+              <IconComponent
+                fill="#555657"
+                icon="message-text"
+                width={26}
+                height={26}
+              />
+            </ButtonComponent>
+            <DropDownMenuComponent
+              options={[
+                {
+                  text: constants.LABELS.CHAT.LOGOUT,
+                  event: handleLogout,
+                },
+              ]}
+              icon={{
+                fill: '#555657',
+                icon: 'dots-vertical',
+                width: 26,
+                height: 26,
+              }}
+              marginButton="0px 0px 0px 20px"
+            />
+          </div>
+        </div>
+      </header>
+      <div>
+        <InputSearchComponent handleChange={handleChangeSearch} />
+      </div>
+      <ConversationsList
+        items={items}
+        isFetching={isFetching}
+        emptyMessage={constants.LABELS.CHAT.NO_CONVERSATIONS_TO_SHOW}
+        onClickItem={handleClickConversationItem}
+        onDeleteItem={handleDeleteConversation}
+        deleteDropDownMessage={constants.LABELS.CHAT.DELETE_CHAT}
+      />
+      <DrawerComponent
+        drawerName="addContact"
+        title={constants.LABELS.CHAT.ADD_CONTACT}
+      >
+        <AddContactDrawer />
+      </DrawerComponent>
+      <DrawerComponent
+        drawerName="newConversation"
+        title={constants.LABELS.CHAT.NEW_CONVERSATION}
+      >
+        <StartConversationDrawer drawerName="newConversation" />
+      </DrawerComponent>
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		contactData: state.contact,
-		conversationData: state.conversation
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		contactActions: bindActionCreators(contactActions, dispatch),
-		conversationActions: bindActionCreators(conversationActions, dispatch),
-		drawerActions: bindActionCreators(drawerActions, dispatch),
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(ActionsWrapper);
+export default ActionsWrapper;
