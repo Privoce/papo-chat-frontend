@@ -10,28 +10,35 @@ class MediaDevice extends Emitter {
    * Start media devices and send stream
    */
   start() {
-    const constraints = {
-      video: {
-        facingMode: 'user',
-        height: { min: 360, ideal: 720, max: 1080 },
-      },
-      audio: true,
-    };
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const cams = devices.filter((device) => device.kind === 'videoinput');
 
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => {
-        this.stream = stream;
-        this.emit('stream', stream);
-      })
-      .catch((err) => {
-        if (err instanceof DOMException) {
-          // TODO: put alert box here
-          alert('Cannot open webcam and/or microphone');
-        } else {
-          console.log(err);
-        }
-      });
+      const constraints = {
+        video:
+          cams.length > 0
+            ? {
+                facingMode: 'user',
+                height: { min: 360, ideal: 720, max: 1080 },
+              }
+            : false,
+        audio: true,
+      };
+
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((stream) => {
+          this.stream = stream;
+          this.emit('stream', stream);
+        })
+        .catch((err) => {
+          if (err instanceof DOMException) {
+            // TODO: put alert box here
+            alert('Cannot open webcam and/or microphone');
+          } else {
+            console.log(err);
+          }
+        });
+    });
 
     return this;
   }

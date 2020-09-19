@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { useEffect } from 'react';
 
 import classNames from 'classnames';
@@ -66,7 +67,7 @@ function DrawerComponent({ drawerName, children, title }) {
 
 DrawerComponent.propTypes = {
   drawerName: PropTypes.string.isRequired,
-  children: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 };
 

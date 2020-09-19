@@ -5,7 +5,11 @@ import _ from 'lodash';
 import { MdCall, MdCallEnd } from 'react-icons/md';
 
 import { ActionsWrapper, ChatWrapper } from 'entries/chat/wrappers';
-import { CallWindowComponent } from 'shared/components';
+import {
+  CallWindowComponent,
+  StartCallWindow,
+  IncomingCallwindow,
+} from 'shared/components';
 
 import PeerConnection from 'modules/utils/PeerConnection';
 
@@ -31,10 +35,13 @@ class HomeEntry extends Component {
       localSrc: null,
       peerSrc: null,
       started: false,
+      newCall: false,
     };
     this.pc = {};
     this.config = null;
     this.startCallHandler = this.startCall.bind(this);
+    this.endCallHandler = this.endCall.bind(this);
+    this.rejectCallHandler = this.rejectCall.bind(this);
   }
 
   componentDidMount() {
@@ -46,21 +53,21 @@ class HomeEntry extends Component {
   componentDidUpdate() {
     const { videoCallData } = this.props;
 
-    console.log(videoCallData.user, 'updated');
-
     if (
       !this.state.started &&
       videoCallData.socket &&
       videoCallData.socket.on
     ) {
-      videoCallData.socket.on('call', (data) => {
-        if (data.sdp) {
-          this.pc.setRemoteDescription(data.sdp);
-          if (data.sdp.type === 'offer') this.pc.createAnswer();
-        } else {
-          this.pc.addIceCandidate(data.candidate);
-        }
-      });
+      videoCallData.socket
+        .on('call', (data) => {
+          if (data.sdp) {
+            this.pc.setRemoteDescription(data.sdp);
+            if (data.sdp.type === 'offer') this.pc.createAnswer();
+          } else {
+            this.pc.addIceCandidate(data.candidate);
+          }
+        })
+        .on('end', this.endCall.bind(this, false));
 
       this.setState({
         started: true,
@@ -82,16 +89,62 @@ class HomeEntry extends Component {
       .start(isCaller, config, getUser());
   }
 
-  handleCallStart = () => {
+  rejectCall() {
+    const { videoCallData } = this.props;
+    const { calling, user } = videoCallData;
+
+    videoCallData.socket.emit('end', { to: user._id });
+    this.setState({ callModal: '' });
+
+    const { videoCallActions } = this.props;
+
+    videoCallActions.closedVideoCall();
+  }
+
+  endCall(isStarter) {
+    if (_.isFunction(this.pc.stop)) {
+      this.pc.stop(isStarter);
+    }
+
+    this.pc = {};
+    this.config = null;
+    this.setState({
+      callWindow: '',
+      callModal: '',
+      localSrc: null,
+      peerSrc: null,
+    });
+
+    this.handleCancelCall();
+  }
+
+  handleInitiateCall = () => {
+    this.setState({ newCall: true });
+  };
+
+  handleCallStart = (mode) => {
     const { conversationData } = this.props;
     const { currentPartnerIdConversation } = conversationData;
-    const config = { audio: true, video: true };
+
+    let config = {};
+    if (mode === 'audio') {
+      config = { audio: true, video: false };
+    } else {
+      config = { audio: true, video: true };
+    }
+
     this.startCall(true, currentPartnerIdConversation, config);
   };
 
-  handleAceptCall = () => {
+  handleAceptCall = (mode) => {
     const { videoCallData } = this.props;
-    const config = { audio: true, video: true };
+
+    let config = {};
+    if (mode === 'audio') {
+      config = { audio: true, video: false };
+    } else {
+      config = { audio: true, video: true };
+    }
 
     this.startCall(false, videoCallData.user._id, config);
     const { videoCallActions } = this.props;
@@ -99,34 +152,41 @@ class HomeEntry extends Component {
     videoCallActions.acceptedVideoCall();
   };
 
-  handleCancelCall = () => {};
+  handleCancelCall = () => {
+    this.setState({ newCall: false });
+  };
 
   render() {
     const { videoCallData } = this.props;
     const { calling, user } = videoCallData;
-    const { localSrc, peerSrc } = this.state;
+    const { localSrc, peerSrc, newCall } = this.state;
+
+    const { conversationData } = this.props;
 
     return (
       <>
         {calling && (
-          <div className="call-container">
-            <img src={profilePlaceholder} alt="User profile picture" />
-            <h2>{user.nickname}</h2>
-            <p>Is calling...</p>
-            <div className="button-container">
-              <button onClick={this.handleAceptCall}>
-                <MdCall />
-              </button>
-              <button onClick={this.handleCancelCall}>
-                <MdCallEnd />
-              </button>
-            </div>
-          </div>
+          <IncomingCallwindow
+            nickname={user.nickname}
+            handleAceptCall={this.handleAceptCall}
+            handleCancelCall={this.rejectCallHandler}
+          />
         )}
-        <div className={calling && 'blur-cover'} />
+        {newCall && (
+          <StartCallWindow
+            startCall={this.handleCallStart}
+            conversationData={conversationData}
+            cancel={this.handleCancelCall}
+          />
+        )}
+        <div
+          className={
+            (calling ? 'blur-cover' : '') || (newCall ? 'blur-cover' : '')
+          }
+        />
         <div className={`chat-wrapper ${calling && 'call-blur'}`}>
           <ActionsWrapper />
-          <ChatWrapper startCall={this.handleCallStart} />
+          <ChatWrapper startCall={this.handleInitiateCall} />
         </div>
         {!_.isEmpty(this.config) && (
           <CallWindowComponent

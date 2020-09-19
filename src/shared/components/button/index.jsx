@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/button-has-type */
 import React from 'react';
 
@@ -56,26 +57,27 @@ function ButtonComponent({
 }
 
 ButtonComponent.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   primary: PropTypes.bool,
-  link: PropTypes.string,
-  width: PropTypes.number.isRequired,
+  link: PropTypes.bool,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   isFetching: PropTypes.bool,
   disabled: PropTypes.bool,
-  children: PropTypes.func.isRequired,
-  margin: PropTypes.number.isRequired,
+  children: PropTypes.object.isRequired,
+  margin: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   defaultButton: PropTypes.bool,
   outline: PropTypes.bool,
   small: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  setRef: PropTypes.object,
+  setRef: PropTypes.func,
 };
 
 ButtonComponent.defaultProps = {
+  text: '',
+  margin: '0',
   primary: false,
-  link: '',
+  link: false,
   isFetching: false,
   disabled: false,
   defaultButton: false,

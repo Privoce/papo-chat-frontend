@@ -95,17 +95,19 @@ const clickOutsideConfig = {
 };
 
 DropDownMenuComponent.propTypes = {
-  status: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  status: PropTypes.string,
+  onChange: PropTypes.func,
   options: PropTypes.array,
   icon: PropTypes.object,
-  marginButton: PropTypes.number,
+  marginButton: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 DropDownMenuComponent.defaultProps = {
   options: [],
   icon: {},
   marginButton: 0,
+  status: '',
+  onChange: () => {},
 };
 
 export default onClickOutside(DropDownMenuComponent, clickOutsideConfig);
