@@ -1,8 +1,22 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useRef, useState } from 'react';
 
-function ContentEditableComponent({ onEnter, onFocus }) {
+import { Picker } from 'emoji-mart';
+import PropTypes from 'prop-types';
+import { FiSend } from 'react-icons/fi';
+import { HiEmojiHappy } from 'react-icons/hi';
+import { MdCall } from 'react-icons/md';
+import useOnClickOutside from 'use-onclickoutside';
+
+function ContentEditableComponent({ onEnter, onFocus, handleCall }) {
   const contentEditable = useRef(null);
+  const emojiWindow = useRef(null);
+  const [showEmojis, setShowEmojis] = useState(false);
+
+  function toggleEmojiWindow() {
+    setShowEmojis(!showEmojis);
+  }
+
+  useOnClickOutside(emojiWindow, toggleEmojiWindow);
 
   function handleEnter() {
     onEnter(contentEditable.current.textContent);
@@ -19,17 +33,50 @@ function ContentEditableComponent({ onEnter, onFocus }) {
     return true;
   }
 
+  function setEmoji(emoji) {
+    contentEditable.current.textContent += emoji.native;
+  }
+
   return (
-    <div
-      contentEditable
-      className="content-editable"
-      role="button"
-      spellCheck
-      ref={contentEditable}
-      onKeyDown={handleKeyDown}
-      onFocus={onFocus}
-      tabIndex="-1"
-    />
+    <>
+      <button type="button" className="call-button" onClick={handleCall}>
+        <MdCall />
+      </button>
+      <div
+        contentEditable
+        className="content-editable"
+        role="button"
+        spellCheck
+        ref={contentEditable}
+        onKeyDown={handleKeyDown}
+        onFocus={onFocus}
+        tabIndex="-1"
+      />
+      <button
+        type="button"
+        className="emoji-button"
+        onClick={toggleEmojiWindow}
+      >
+        <HiEmojiHappy />
+      </button>
+
+      <button type="button" className="message-button" onClick={handleEnter}>
+        <FiSend />
+      </button>
+
+      {showEmojis && (
+        <div ref={emojiWindow}>
+          <Picker
+            onSelect={setEmoji}
+            style={{ position: 'absolute', bottom: '20px', right: '20px' }}
+            showPreview={false}
+            emojiTooltip={false}
+            title=""
+            emoji=""
+          />
+        </div>
+      )}
+    </>
   );
 }
 

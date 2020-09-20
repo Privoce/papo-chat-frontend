@@ -1,14 +1,49 @@
 .content-editable {
-	background: $brand-secondary;
-	border-radius: 4px;
-	color: $brand-text;
-	width: 100%;
-	padding: 10px 20px 10px 20px;
-	max-height: 100px;
-	min-height: 46px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	position: relative;
-	white-space: pre-wrap;
-	word-wrap: break-word;
+  background: $brand-secondary;
+  border-radius: 4px;
+  color: $brand-text;
+  width: 100%;
+  padding: 10px 20px 10px 20px;
+  max-height: 100px;
+  min-height: 46px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.call-button {
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  color: #4064d1;
+  margin-right: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.emoji-button {
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  color: #4064d1;
+  margin-left: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.message-button {
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  color: #4064d1;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
