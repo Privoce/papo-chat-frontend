@@ -29,7 +29,7 @@
       "PASSWORD_DOESNT_MATCH": "Password and confirm password must match"
     },
     "CHAT": {
-      "NEW_CONVERSATION": "New conversation",
+      "NEW_CONVERSATION": "Contacts",
       "ADD_CONTACT": "Add contact",
       "NO_CONVERSATIONS_TO_SHOW": "No conversations to show",
       "NO_CONTACTS_TO_SHOW": "No contacts to show",
