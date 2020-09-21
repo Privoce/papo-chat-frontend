@@ -164,74 +164,76 @@ function ActionsWrapper() {
 
   return (
     <div className="actions-wrapper">
-      <header className="header-container">
-        <div className="header-content">
-          <UserInfoComponent
-            isFetching={false}
-            column
-            profile={{
-              label: nickname,
-              width: 60,
-              height: 60,
-              backgroundColor: profileColor,
-              color: 'white',
-              labelFontSize: 16,
-            }}
-            title={{
-              text: nickname,
-              fontSize: 16,
-              margin: '10px 0px 0px 0px',
-            }}
-          />
-          <div>
-            <ButtonComponent
-              type="button"
-              width={26}
-              height={26}
-              link
-              onClick={handleOpenAddContact}
-            >
-              <IconComponent
-                fill="#555657"
-                icon="account-plus"
-                width={26}
-                height={26}
-              />
-            </ButtonComponent>
-            <ButtonComponent
-              type="button"
-              width={26}
-              height={26}
-              margin="0px 0px 0px 20px"
-              link
-              onClick={handleOpenNewConversation}
-            >
-              <IconComponent
-                fill="#555657"
-                icon="message-text"
-                width={26}
-                height={26}
-              />
-            </ButtonComponent>
-            <DropDownMenuComponent
-              options={[
-                {
-                  text: constants.LABELS.CHAT.LOGOUT,
-                  event: handleLogout,
-                },
-              ]}
-              icon={{
-                fill: '#555657',
-                icon: 'dots-vertical',
-                width: 26,
-                height: 26,
+      <div className="actions-wrapper-content">
+        <header className="header-container">
+          <div className="header-content">
+            <UserInfoComponent
+              isFetching={false}
+              column
+              profile={{
+                label: nickname,
+                width: 60,
+                height: 60,
+                backgroundColor: profileColor,
+                color: 'white',
+                labelFontSize: 16,
               }}
-              marginButton="0px 0px 0px 20px"
+              title={{
+                text: nickname,
+                fontSize: 16,
+                margin: '10px 0px 0px 0px',
+              }}
             />
+            <div>
+              <ButtonComponent
+                type="button"
+                width={26}
+                height={26}
+                link
+                onClick={handleOpenAddContact}
+              >
+                <IconComponent
+                  fill="#555657"
+                  icon="account-plus"
+                  width={26}
+                  height={26}
+                />
+              </ButtonComponent>
+              <ButtonComponent
+                type="button"
+                width={26}
+                height={26}
+                margin="0px 0px 0px 20px"
+                link
+                onClick={handleOpenNewConversation}
+              >
+                <IconComponent
+                  fill="#555657"
+                  icon="message-text"
+                  width={26}
+                  height={26}
+                />
+              </ButtonComponent>
+              <DropDownMenuComponent
+                options={[
+                  {
+                    text: constants.LABELS.CHAT.LOGOUT,
+                    event: handleLogout,
+                  },
+                ]}
+                icon={{
+                  fill: '#555657',
+                  icon: 'dots-vertical',
+                  width: 26,
+                  height: 26,
+                }}
+                marginButton="0px 0px 0px 20px"
+              />
+            </div>
           </div>
-        </div>
-      </header>
-      <div>
+        </header>
+      </div>
+      <div className="main-search-container">
         <InputSearchComponent handleChange={handleChangeSearch} />
       </div>
       <ConversationsList

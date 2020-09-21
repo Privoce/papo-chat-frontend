@@ -4,11 +4,12 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  width: 30%;
+  width: 40%;
   height: 100%;
   border-radius: 4px 0px 0px 4px;
   min-width: 285px;
-  background: #f8f8f8;
+  background: #e8e9ea;
+  transition: all 0.2s ease-in-out;
 
   .header-container {
     min-height: 140px;
@@ -20,5 +21,21 @@
       display: flex;
       justify-content: space-between;
     }
+  }
+
+  .actions-wrapper-content {
+    width: 90%;
+    background-color: #fff;
+    box-shadow: 16px 20px 20px rgba(133, 130, 137, 0.25);
+  }
+
+  .main-search-container {
+    width: 90%;
+    background-color: #fff;
+  }
+
+  .search-container-conner {
+    border-bottom-right-radius: 50px;
+    box-shadow: 1px 10px 20px rgba(133, 130, 137, 0.25);
   }
 }

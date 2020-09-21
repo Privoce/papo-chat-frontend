@@ -4,18 +4,20 @@
   overflow: auto;
 
   .conversations-list-container {
-    div {
-      .conversation-card {
-        background-color: #fff;
-
-        .conversation-card--container {
-          border-top: none;
-        }
+    .conversation-card {
+      background-color: #fff;
+      width: 100%;
+      .conversation-card--container {
+        border-top: none;
       }
+    }
 
-      &.conversation-card:hover {
-        background-color: #f1f2f4;
-      }
+    .conversation-card:last-child {
+      border-bottom-right-radius: 0px;
+    }
+
+    .conversation-card:hover {
+      background-color: #f1f2f4;
     }
   }
 }
