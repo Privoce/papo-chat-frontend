@@ -56,6 +56,7 @@ function DrawerComponent({ drawerName, children, title }) {
               text={title}
               fontSize={16}
               margin="0px 0px 3px 15px"
+              headerTitle
             />
           </header>
           {children}

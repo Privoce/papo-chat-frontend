@@ -7,15 +7,21 @@ import { HiEmojiHappy } from 'react-icons/hi';
 import { MdCall } from 'react-icons/md';
 import useOnClickOutside from 'use-onclickoutside';
 
-function ContentEditableComponent({ onEnter, onFocus, handleCall }) {
+function ContentEditableComponent({
+  onEnter,
+  onFocus,
+  handleCall,
+  currentConversation,
+}) {
   const contentEditable = useRef(null);
   const emojiWindow = useRef(null);
   const [showEmojis, setShowEmojis] = useState(false);
 
   useEffect(() => {
+    contentEditable.current.textContent = '';
     contentEditable.current.focus();
-  }, []);
-  // TO DO: FIX THE MESSAGE CONTAINER WHO DOESN'T CHANGE WITH THE CONTACT
+  }, [currentConversation]);
+
   function toggleEmojiWindow() {
     setShowEmojis(!showEmojis);
   }
@@ -88,6 +94,9 @@ function ContentEditableComponent({ onEnter, onFocus, handleCall }) {
 ContentEditableComponent.propTypes = {
   onEnter: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  handleCall: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  currentConversation: PropTypes.object.isRequired,
 };
 
 export default ContentEditableComponent;

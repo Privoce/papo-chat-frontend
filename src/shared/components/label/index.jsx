@@ -18,12 +18,14 @@ function LabelComponent({
   alignCenter,
   alignRight,
   width,
+  headerTitle,
 }) {
   const spanClassName = classNames({
     label: true,
     fadeIn: true,
     danger,
     dark,
+    headerTitle,
     'font-bold': fontBold,
     'font-semi-bold': fontSemiBold,
     'font-medium': fontMedium,
