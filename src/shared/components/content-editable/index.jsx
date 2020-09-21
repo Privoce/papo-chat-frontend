@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { Picker } from 'emoji-mart';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import { FiSend } from 'react-icons/fi';
 import { HiEmojiHappy } from 'react-icons/hi';
 import { MdCall } from 'react-icons/md';
@@ -12,6 +12,10 @@ function ContentEditableComponent({ onEnter, onFocus, handleCall }) {
   const emojiWindow = useRef(null);
   const [showEmojis, setShowEmojis] = useState(false);
 
+  useEffect(() => {
+    contentEditable.current.focus();
+  }, []);
+  // TO DO: FIX THE MESSAGE CONTAINER WHO DOESN'T CHANGE WITH THE CONTACT
   function toggleEmojiWindow() {
     setShowEmojis(!showEmojis);
   }
@@ -51,6 +55,7 @@ function ContentEditableComponent({ onEnter, onFocus, handleCall }) {
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         tabIndex="-1"
+        placeholder="Type a message here..."
       />
       <button
         type="button"

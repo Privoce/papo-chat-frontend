@@ -48,3 +48,11 @@
     cursor: pointer;
   }
 }
+
+.content-editable[contentEditable='true']:empty:not(:focus):before {
+  content: attr(placeholder);
+}
+
+.content-editable[contentEditable='true']:empty:before {
+  content: attr(placeholder);
+}
