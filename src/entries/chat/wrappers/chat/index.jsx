@@ -211,7 +211,6 @@ class ChatWrapper extends Component {
               margin: '0px 0px 0px 14px',
             }}
           />
-          <button onClick={this.props.startCall}>Video</button>
         </header>
         <section
           ref={this.conversationContainer}
@@ -231,6 +230,7 @@ class ChatWrapper extends Component {
           <ContentEditableComponent
             onEnter={this.handleSendMessage}
             onFocus={this.setConversationIsRead}
+            handleCall={this.props.startCall}
           />
         </footer>
       </div>
