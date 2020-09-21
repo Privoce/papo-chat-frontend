@@ -1,14 +1,16 @@
 .content-editable {
-	background: $brand-secondary;
-	border-radius: 4px;
-	color: $brand-text;
-	width: 100%;
-	padding: 10px 20px 10px 20px;
-	max-height: 100px;
-	min-height: 46px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	position: relative;
-	white-space: pre-wrap;
-	word-wrap: break-word;
+  background: #f8f8f8;
+  box-shadow: 20px 20px 60px rgba(133, 130, 137, 0.25),
+    -20px -20px 60px rgba(211, 201, 201, 0.15);
+  border-radius: 50px;
+  color: $brand-text;
+  width: 80%;
+  padding: 20px 20px 10px 20px;
+  max-height: 100px;
+  min-height: 46px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
