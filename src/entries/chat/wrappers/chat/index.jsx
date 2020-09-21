@@ -227,6 +227,7 @@ class ChatWrapper extends Component {
             onEnter={this.handleSendMessage}
             onFocus={this.setConversationIsRead}
             handleCall={this.props.startCall}
+            currentConversation={currentConversation}
           />
         </footer>
       </div>

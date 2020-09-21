@@ -114,7 +114,7 @@ export default class UserInfoComponent extends Component {
                 margin="0px 0px 5px 0px"
               />
             ) : null}
-            {/* <div className="footer-container">
+            <div className="footer-container">
               {tagInfo ? <TagComponent success text={tagInfo} /> : null}
               {actions ? (
                 <div className={actionsContainerStyles}>
@@ -131,7 +131,7 @@ export default class UserInfoComponent extends Component {
                   />
                 </div>
               ) : null}
-            </div> */}
+            </div>
           </div>
         )}
       </div>
