@@ -6,7 +6,13 @@ import { MdCall, MdCameraAlt, MdCancel } from 'react-icons/md';
 
 import placeholderImg from '../../../assets/images/no-picture.png';
 
-function StartCallWindow({ startCall, image, conversationData, cancel }) {
+function StartCallWindow({
+  startCall,
+  image,
+  conversationData,
+  cancel,
+  calling,
+}) {
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -20,24 +26,32 @@ function StartCallWindow({ startCall, image, conversationData, cancel }) {
         String(item.partnerId._id) === String(currentPartnerIdConversation)
     );
 
-    console.log(currentConversation.partnerId);
-
     setCurrentUser(currentConversation.partnerId);
   }, [conversationData]);
 
   return (
     <div className="start-call-container">
       <img src={image || placeholderImg} alt="User profile" />
-      <h2>Ligar para</h2>
+      <h2>{calling ? 'Calling to:' : 'Call to'}</h2>
       <p>{currentUser.nickname || 'Usuario'}</p>
       <div className="button-container">
-        <button type="button" onClick={() => startCall('audio')}>
+        <button
+          type="button"
+          disabled={calling}
+          className={calling ? 'disabled' : ''}
+          onClick={() => startCall('audio')}
+        >
           <MdCall />
         </button>
-        <button type="button" onClick={() => startCall('video')}>
+        <button
+          type="button"
+          disabled={calling}
+          className={calling ? 'disabled' : ''}
+          onClick={() => startCall('video')}
+        >
           <MdCameraAlt />
         </button>
-        <button type="button" onClick={cancel}>
+        <button type="button" onClick={() => cancel()}>
           <MdCancel />
         </button>
       </div>

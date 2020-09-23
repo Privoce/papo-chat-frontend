@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { MdCall, MdCallEnd } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import { ActionsWrapper, ChatWrapper } from 'entries/chat/wrappers';
 import {
@@ -21,7 +21,9 @@ import { getUser } from 'modules/utils';
 
 import * as socketActions from 'redux/actions/socket';
 import * as videoCallActions from 'redux/actions/videoCall';
-import profilePlaceholder from '../../assets/images/no-picture.png';
+
+//call timeout in seconds
+const CALL_TIME_OUT = 10;
 
 class HomeEntry extends Component {
   constructor() {
@@ -36,7 +38,10 @@ class HomeEntry extends Component {
       peerSrc: null,
       started: false,
       newCall: false,
+      acepted: false,
+      iStartedCall: false,
     };
+    this.callTimeOut = null;
     this.pc = {};
     this.config = null;
     this.startCallHandler = this.startCall.bind(this);
@@ -61,13 +66,20 @@ class HomeEntry extends Component {
       videoCallData.socket
         .on('call', (data) => {
           if (data.sdp) {
+            this.setState({ acepted: true });
             this.pc.setRemoteDescription(data.sdp);
             if (data.sdp.type === 'offer') this.pc.createAnswer();
           } else {
             this.pc.addIceCandidate(data.candidate);
           }
         })
-        .on('end', this.endCall.bind(this, false));
+        .on('end', (data) => {
+          let timeout = false;
+          if (data) {
+            timeout = data.timeout;
+          }
+          this.endCallHandler(false, timeout);
+        });
 
       this.setState({
         started: true,
@@ -76,6 +88,8 @@ class HomeEntry extends Component {
   }
 
   startCall(isCaller, friendID, config) {
+    clearTimeout(this.callTimeOut);
+    this.setState({ iStartedCall: true });
     this.config = config;
     this.pc = new PeerConnection(friendID)
       .on('localStream', (src) => {
@@ -89,11 +103,15 @@ class HomeEntry extends Component {
       .start(isCaller, config, getUser());
   }
 
-  rejectCall() {
+  rejectCall(timeout) {
     const { videoCallData } = this.props;
-    const { calling, user } = videoCallData;
+    const { user } = videoCallData;
 
-    videoCallData.socket.emit('end', { to: user._id });
+    videoCallData.socket.emit('end', {
+      to: user._id,
+      timeout,
+    });
+
     this.setState({ callModal: '' });
 
     const { videoCallActions } = this.props;
@@ -101,10 +119,22 @@ class HomeEntry extends Component {
     videoCallActions.closedVideoCall();
   }
 
-  endCall(isStarter) {
+  endCall(isStarter, timeout) {
+    const { acepted } = this.state;
+
+    clearTimeout(this.callTimeOut);
+
     if (_.isFunction(this.pc.stop)) {
       this.pc.stop(isStarter);
     }
+
+    // if is calling and not accepted yet,
+    // end the call
+    if (!acepted) {
+      this.rejectCallHandler(timeout);
+    }
+
+    this.setState({ acepted: false, iStartedCall: false });
 
     this.pc = {};
     this.config = null;
@@ -113,12 +143,23 @@ class HomeEntry extends Component {
       callModal: '',
       localSrc: null,
       peerSrc: null,
+      newCall: false,
     });
-
-    this.handleCancelCall();
   }
 
   handleInitiateCall = () => {
+    this.callTimeOut = setTimeout(() => {
+      this.handleCancelCall(true);
+      toast.error('Chamada não atendida', {
+        position: 'bottom-right',
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      });
+    }, CALL_TIME_OUT * 1000);
     this.setState({ newCall: true });
   };
 
@@ -152,14 +193,14 @@ class HomeEntry extends Component {
     videoCallActions.acceptedVideoCall();
   };
 
-  handleCancelCall = () => {
-    this.setState({ newCall: false });
+  handleCancelCall = (timeout) => {
+    this.endCall(true, timeout);
   };
 
   render() {
     const { videoCallData } = this.props;
     const { calling, user } = videoCallData;
-    const { localSrc, peerSrc, newCall } = this.state;
+    const { localSrc, peerSrc, newCall, acepted, iStartedCall } = this.state;
 
     const { conversationData } = this.props;
 
@@ -172,11 +213,12 @@ class HomeEntry extends Component {
             handleCancelCall={this.rejectCallHandler}
           />
         )}
-        {newCall && (
+        {newCall && !acepted && (
           <StartCallWindow
             startCall={this.handleCallStart}
             conversationData={conversationData}
             cancel={this.handleCancelCall}
+            calling={iStartedCall}
           />
         )}
         <div
@@ -188,7 +230,7 @@ class HomeEntry extends Component {
           <ActionsWrapper />
           <ChatWrapper startCall={this.handleInitiateCall} />
         </div>
-        {!_.isEmpty(this.config) && (
+        {!_.isEmpty(this.config) && acepted && (
           <CallWindowComponent
             status="calling"
             localSrc={localSrc}

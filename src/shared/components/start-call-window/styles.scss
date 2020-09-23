@@ -82,4 +82,12 @@
     background: #f33;
     color: #fff;
   }
+
+  .disabled {
+    color: #ccc !important;
+    background-color: rgb(172, 172, 172) !important;
+  }
+  .disabled:hover {
+    cursor: not-allowed;
+  }
 }
