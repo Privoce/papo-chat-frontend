@@ -157,7 +157,7 @@ class ChatWrapper extends Component {
   };
 
   renderChatContainer = () => {
-    const { conversationData, messageData } = this.props;
+    const { conversationData, messageData, isOnline } = this.props;
 
     const { getMessages } = messageData;
 
@@ -200,6 +200,7 @@ class ChatWrapper extends Component {
               fontSize: 13,
               margin: '0px 0px 0px 14px',
             }}
+            isOnline={isOnline}
             desc={{
               text: '',
               fontSize: 13,

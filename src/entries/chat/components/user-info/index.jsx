@@ -40,6 +40,7 @@ export default class UserInfoComponent extends Component {
       sketchDark,
       tagInfo,
       actions,
+      isOnline,
     } = this.props;
 
     const userInfoContainerStyles = classNames({
@@ -93,6 +94,7 @@ export default class UserInfoComponent extends Component {
           <div className="labels-container">
             <LabelComponent fontSemiBold dark breakWord {...title} />
             <LabelComponent fontRegular dark breakWord {...desc} />
+            {isOnline && <span className="online" />}
           </div>
         </div>
 

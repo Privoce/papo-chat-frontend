@@ -40,6 +40,7 @@ class HomeEntry extends Component {
       newCall: false,
       acepted: false,
       iStartedCall: false,
+      partnerIsOnline: false,
     };
     this.callTimeOut = null;
     this.pc = {};
@@ -57,6 +58,16 @@ class HomeEntry extends Component {
 
   componentDidUpdate() {
     const { videoCallData } = this.props;
+    const { conversationData } = this.props;
+    const { currentPartnerIdConversation } = conversationData;
+
+    // make a request to check if user is online
+    if (videoCallData.socket && currentPartnerIdConversation) {
+      console.log('checando');
+      videoCallData.socket.emit('isOnline', {
+        userId: currentPartnerIdConversation,
+      });
+    }
 
     if (
       !this.state.started &&
@@ -79,6 +90,19 @@ class HomeEntry extends Component {
             timeout = data.timeout;
           }
           this.endCallHandler(false, timeout);
+        })
+        .on('isOnline', (data) => {
+          if (data.status === 'online') {
+            if (this.state.partnerIsOnline) {
+              return;
+            }
+            this.setState({ partnerIsOnline: true });
+          } else {
+            if (!this.state.partnerIsOnline) {
+              return;
+            }
+            this.setState({ partnerIsOnline: false });
+          }
         });
 
       this.setState({
@@ -200,7 +224,14 @@ class HomeEntry extends Component {
   render() {
     const { videoCallData } = this.props;
     const { calling, user } = videoCallData;
-    const { localSrc, peerSrc, newCall, acepted, iStartedCall } = this.state;
+    const {
+      localSrc,
+      peerSrc,
+      newCall,
+      acepted,
+      iStartedCall,
+      partnerIsOnline,
+    } = this.state;
 
     const { conversationData } = this.props;
 
@@ -228,7 +259,10 @@ class HomeEntry extends Component {
         />
         <div className={`chat-wrapper ${calling && 'call-blur'}`}>
           <ActionsWrapper />
-          <ChatWrapper startCall={this.handleInitiateCall} />
+          <ChatWrapper
+            startCall={this.handleInitiateCall}
+            isOnline={partnerIsOnline}
+          />
         </div>
         {!_.isEmpty(this.config) && acepted && (
           <CallWindowComponent
