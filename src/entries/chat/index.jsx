@@ -23,7 +23,7 @@ import * as socketActions from 'redux/actions/socket';
 import * as videoCallActions from 'redux/actions/videoCall';
 
 //call timeout in seconds
-const CALL_TIME_OUT = 10;
+const CALL_TIME_OUT = 20;
 
 class HomeEntry extends Component {
   constructor() {
@@ -63,7 +63,6 @@ class HomeEntry extends Component {
 
     // make a request to check if user is online
     if (videoCallData.socket && currentPartnerIdConversation) {
-      console.log('checando');
       videoCallData.socket.emit('isOnline', {
         userId: currentPartnerIdConversation,
       });
@@ -85,6 +84,7 @@ class HomeEntry extends Component {
           }
         })
         .on('end', (data) => {
+          console.log('end');
           let timeout = false;
           if (data) {
             timeout = data.timeout;
@@ -112,7 +112,6 @@ class HomeEntry extends Component {
   }
 
   startCall(isCaller, friendID, config) {
-    clearTimeout(this.callTimeOut);
     this.setState({ iStartedCall: true });
     this.config = config;
     this.pc = new PeerConnection(friendID)
@@ -123,28 +122,33 @@ class HomeEntry extends Component {
       })
       .on('peerStream', (src) => {
         this.setState({ peerSrc: src });
+        clearTimeout(this.callTimeOut);
       })
       .start(isCaller, config, getUser());
   }
 
   rejectCall(timeout) {
-    const { videoCallData } = this.props;
+    const { videoCallData, videoCallActions } = this.props;
     const { user } = videoCallData;
+
+    console.log('aqui foi');
 
     videoCallData.socket.emit('end', {
       to: user._id,
-      timeout,
+      timeout: timeout | false,
     });
 
-    this.setState({ callModal: '' });
+    console.log('aqui foi tbm');
 
-    const { videoCallActions } = this.props;
+    // this.setState({ callModal: '' });
 
     videoCallActions.closedVideoCall();
   }
 
   endCall(isStarter, timeout) {
     const { acepted } = this.state;
+    const { videoCallData } = this.props;
+    const { calling } = videoCallData;
 
     clearTimeout(this.callTimeOut);
 
@@ -154,7 +158,7 @@ class HomeEntry extends Component {
 
     // if is calling and not accepted yet,
     // end the call
-    if (!acepted) {
+    if (!acepted && calling) {
       this.rejectCallHandler(timeout);
     }
 
@@ -172,6 +176,13 @@ class HomeEntry extends Component {
   }
 
   handleInitiateCall = () => {
+    this.setState({ newCall: true });
+  };
+
+  handleCallStart = (mode) => {
+    const { conversationData } = this.props;
+    const { currentPartnerIdConversation } = conversationData;
+
     this.callTimeOut = setTimeout(() => {
       this.handleCancelCall(true);
       toast.error('Chamada não atendida', {
@@ -184,12 +195,6 @@ class HomeEntry extends Component {
         progress: 0,
       });
     }, CALL_TIME_OUT * 1000);
-    this.setState({ newCall: true });
-  };
-
-  handleCallStart = (mode) => {
-    const { conversationData } = this.props;
-    const { currentPartnerIdConversation } = conversationData;
 
     let config = {};
     if (mode === 'audio') {
