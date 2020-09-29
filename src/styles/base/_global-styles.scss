@@ -10,8 +10,6 @@ div {
 }
 
 .route-section {
-  display: flex;
-  justify-content: center;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -61,4 +59,13 @@ div {
     justify-content: center;
     align-items: center;
   }
+}
+
+.fab-container {
+  bottom: 1px !important;
+  position: absolute !important;
+  margin: 1em !important;
+  left: 1px !important;
+  right: auto !important;
+  z-index: 9;
 }
