@@ -9,7 +9,7 @@ class MediaDevice extends Emitter {
   /**
    * Start media devices and send stream
    */
-  start() {
+  start(config) {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const cams = devices.filter((device) => device.kind === 'videoinput');
 
@@ -28,6 +28,7 @@ class MediaDevice extends Emitter {
         .getUserMedia(constraints)
         .then((stream) => {
           this.stream = stream;
+
           this.emit('stream', stream);
         })
         .catch((err) => {
@@ -55,6 +56,9 @@ class MediaDevice extends Emitter {
         const state = len === 2 ? on : !track.enabled;
         _.set(track, 'enabled', state);
       });
+      if (type === 'Video') {
+        this.emit('toggle-video', on);
+      }
     }
     return this;
   }

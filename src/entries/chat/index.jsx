@@ -75,11 +75,11 @@ class HomeEntry extends Component {
     ) {
       videoCallData.socket
         .on('call', (data) => {
-          if (data.sdp) {
+          if (data.sdp && this.pc.setRemoteDescription) {
             this.setState({ acepted: true });
             this.pc.setRemoteDescription(data.sdp);
             if (data.sdp.type === 'offer') this.pc.createAnswer();
-          } else {
+          } else if (this.pc && this.pc.addIceCandidate) {
             this.pc.addIceCandidate(data.candidate);
           }
         })
@@ -131,14 +131,10 @@ class HomeEntry extends Component {
     const { videoCallData, videoCallActions } = this.props;
     const { user } = videoCallData;
 
-    console.log('aqui foi');
-
     videoCallData.socket.emit('end', {
       to: user._id,
       timeout: timeout | false,
     });
-
-    console.log('aqui foi tbm');
 
     // this.setState({ callModal: '' });
 

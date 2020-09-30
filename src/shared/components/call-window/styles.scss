@@ -2,13 +2,15 @@ $fa-font-path: '~font-awesome/fonts';
 @import '~font-awesome/scss/font-awesome';
 
 .call-window {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 80vw;
-  height: 90vh;
+  width: 100vw;
+  height: 100vh;
   opacity: 1;
   z-index: 999;
+  background-color: #0093e9;
+  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
 
   &.active {
     opacity: 1;
@@ -40,8 +42,8 @@ $fa-font-path: '~font-awesome/fonts';
   #localVideo {
     bottom: 0;
     right: 0;
-    width: 20%;
-    height: 20%;
+    width: 100%;
+    height: 100%;
   }
 
   #peerVideo {
@@ -92,6 +94,20 @@ $fa-font-path: '~font-awesome/fonts';
           background-color: #f33;
         }
       }
+    }
+  }
+
+  .user-call-image {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 200px;
+      width: 200px;
     }
   }
 }

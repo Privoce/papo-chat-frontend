@@ -50,6 +50,11 @@ class PeerConnection extends Emitter {
           });
         } else this.createOffer();
       })
+      .on('toggle-video', (status) => {
+        this.socket.emit('toggle-video', {
+          status,
+        });
+      })
       .start(config);
 
     return this;
