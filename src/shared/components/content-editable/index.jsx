@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import { Picker } from 'emoji-mart';
 import PropTypes, { func } from 'prop-types';
-import { Container, Button, Link } from 'react-floating-action-button';
-import { AiOutlineMore } from 'react-icons/ai';
 import { FiSend } from 'react-icons/fi';
 import { HiEmojiHappy } from 'react-icons/hi';
 import { MdCall } from 'react-icons/md';
@@ -51,31 +49,7 @@ function ContentEditableComponent({
 
   return (
     <>
-      <Container>
-        <Link href="#" tooltip="Create note link" icon="far fa-sticky-note" />
-        <Link
-          href="#"
-          tooltip="Add user link"
-          icon="fas fa-user-plus"
-          className="fab-item btn btn-link btn-lg text-white"
-        />
-        <Button tooltip="The big plus button!" rotate>
-          <AiOutlineMore />
-        </Button>
-      </Container>
-      <button
-        type="button"
-        className="emoji-button"
-        onClick={toggleEmojiWindow}
-      >
-        <HiEmojiHappy />
-      </button>
-
-      <button
-        type="button"
-        className="call-button icon-footer"
-        onClick={handleCall}
-      >
+      <button type="button" className="call-button" onClick={handleCall}>
         <MdCall />
       </button>
       <div
@@ -89,12 +63,15 @@ function ContentEditableComponent({
         tabIndex="-1"
         placeholder="Type a message here..."
       />
-
       <button
         type="button"
-        className="message-button icon-footer"
-        onClick={handleEnter}
+        className="emoji-button"
+        onClick={toggleEmojiWindow}
       >
+        <HiEmojiHappy />
+      </button>
+
+      <button type="button" className="message-button" onClick={handleEnter}>
         <FiSend />
       </button>
 
