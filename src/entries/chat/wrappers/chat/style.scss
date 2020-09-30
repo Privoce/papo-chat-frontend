@@ -15,6 +15,9 @@
     align-items: center;
     justify-content: center;
     padding: 25px;
+    width: 100%;
+    height: 100%;
+    background-color: #fefefe;
   }
 
   .chat-content {
@@ -55,7 +58,7 @@
       min-height: 46px;
       border-radius: 0px 0px 4px 0px;
       background: #e8e9ea;
-      padding: 15px 25px 15px 25px;
+      padding: 15px 25px 30px 25px;
     }
   }
 }
