@@ -97,6 +97,10 @@ $fa-font-path: '~font-awesome/fonts';
     }
   }
 
+  .hidden {
+    display: none !important;
+  }
+
   .user-call-image {
     display: flex;
     width: 100%;

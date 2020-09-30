@@ -70,22 +70,21 @@ function CallWindow({
 
   return (
     <div className={classnames('call-window', status)}>
-      {clientVideo ? (
-        <Rnd
-          default={{
-            x: window.innerWidth / 6,
-            y: 50,
-            width: '70%',
-            height: '90%',
-          }}
-        >
-          <video id="peerVideo" ref={peerVideo} autoPlay />
-        </Rnd>
-      ) : (
-        <div className="user-call-image">
-          <img src={noImage} alt="User" />
-        </div>
-      )}
+      <Rnd
+        className={clientVideo ? '' : 'hidden'}
+        default={{
+          x: window.innerWidth / 6,
+          y: 50,
+          width: '70%',
+          height: '90%',
+        }}
+      >
+        <video id="peerVideo" ref={peerVideo} autoPlay />
+      </Rnd>
+
+      <div className={`user-call-image ${clientVideo ? 'hidden' : ''}`}>
+        <img src={noImage} alt="User" />
+      </div>
 
       {video && (
         <Rnd
