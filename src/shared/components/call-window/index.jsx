@@ -87,7 +87,7 @@ function CallWindow({
       </div>
 
       <Rnd
-        className={video ? '' : 'hidden'}
+        className={video ? 'hidden' : ''}
         default={{
           x: window.innerWidth - 400,
           y: window.innerHeight - 200,
