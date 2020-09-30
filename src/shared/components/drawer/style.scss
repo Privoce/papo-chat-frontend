@@ -1,45 +1,30 @@
 .drawer {
-  background-color: $brand-default;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  z-index: 1;
-  transform: translateX(-101%);
-  transition: all 0.2s ease-in-out;
+	background-color: $brand-default;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	z-index: 1;
+	transform: translateX(-101%);
+	transition: all .2s ease-in-out;
 
-  &.open {
-    transform: translateX(0%);
-  }
+	&.open {
+		transform: translateX(0%);
+	}
 
-  .drawer-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
+	.drawer-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		width: 100%;
 
-    .header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      padding-top: 70px;
-      background: #fff;
-      width: 100%;
-      height: 140px;
-
-      button svg {
-        width: 30px;
-        height: 30px;
-      }
-
-      button svg path {
-        fill: #4d5acc;
-      }
-    }
-
-    .headerTitle {
-      font-size: 30px !important;
-      color: #4d5acc;
-    }
-  }
+		.header {
+			display: flex;
+			align-items: flex-end;
+			padding: 20px;
+			background: $brand-primary-ligth;
+			width: 100%;
+			height: 140px;
+		}
+	}
 }

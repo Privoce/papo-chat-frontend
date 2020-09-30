@@ -20,7 +20,6 @@ import { bindActionCreators } from 'redux';
 import constants from 'modules/constants';
 import * as conversationActions from 'redux/actions/conversation';
 import * as messageActions from 'redux/actions/message';
-import logoalora from 'assets/images/logoalora.gif';
 
 class ChatWrapper extends Component {
   constructor(props) {
@@ -169,7 +168,7 @@ class ChatWrapper extends Component {
     if (!currentPartnerIdConversation) {
       return (
         <div className="empty-message-container">
-          <img src={logoalora} alt="logo alora gif" className="logoanimado" />
+          {/* <img src={logoalora} alt="logo alora gif" className="logoanimado" /> */}
         </div>
       );
     }
