@@ -5,7 +5,9 @@ import constants from 'modules/constants';
 import Emitter from './Emitter';
 import MediaDevice from './MediaDevice';
 
-const PC_CONFIG = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+const PC_CONFIG = {
+  iceServers: [{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' }],
+};
 
 class PeerConnection extends Emitter {
   /**
