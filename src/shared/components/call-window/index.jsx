@@ -86,17 +86,18 @@ function CallWindow({
         <img src={noImage} alt="User" />
       </div>
 
-      <Rnd
-        className={video ? 'hidden' : ''}
-        default={{
-          x: window.innerWidth - 400,
-          y: window.innerHeight - 200,
-          width: '20%',
-          height: '20%',
-        }}
-      >
-        <video id="localVideo" ref={localVideo} autoPlay muted />
-      </Rnd>
+      {video && (
+        <Rnd
+          default={{
+            x: window.innerWidth - 400,
+            y: window.innerHeight - 200,
+            width: '20%',
+            height: '20%',
+          }}
+        >
+          <video id="localVideo" ref={localVideo} autoPlay muted />
+        </Rnd>
+      )}
 
       <div className="video-control">
         <button
