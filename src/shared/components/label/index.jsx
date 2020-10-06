@@ -43,9 +43,32 @@ function LabelComponent({
     width,
   };
 
+  function isValidURL(string) {
+    const res = string.match(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    );
+    return res !== null;
+  }
+
+  function drawText(string) {
+    if (!string) {
+      return string;
+    }
+
+    if (isValidURL(string)) {
+      return (
+        <a href={string} target="_blank" rel="noreferrer">
+          {string}
+        </a>
+      );
+    }
+
+    return string;
+  }
+
   return (
     <span className={spanClassName} style={spanStyles}>
-      {text}
+      {drawText(text)}
     </span>
   );
 }

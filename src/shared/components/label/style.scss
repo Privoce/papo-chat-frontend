@@ -1,45 +1,55 @@
 .label {
-	display: block;
+  display: block;
+  -webkit-user-select: text;
+  user-select: text;
 
-	&.align-center {
-		text-align: center;
-	}
+  &.align-center {
+    text-align: center;
+  }
 
-	&.align-right {
-		text-align: right;
-	}
+  &.align-right {
+    text-align: right;
+  }
 
-	&.danger {
-		color: $brand-danger;
-	}
+  &.danger {
+    color: $brand-danger;
+  }
 
-	&.default {
-		color: $brand-default;
-	}
+  &.default {
+    color: $brand-default;
+  }
 
-	&.dark {
-		color: $brand-text-dark;
-	}
+  &.dark {
+    color: $brand-text-dark;
+  }
 
-	&.font-bold {
-		font-weight: 700;
-	}
+  &.font-bold {
+    font-weight: 700;
+  }
 
-	&.font-semi-bold {
-		font-weight: 600;
-	}
+  &.font-semi-bold {
+    font-weight: 600;
+  }
 
-	&.font-medium {
-		font-weight: 500;
-	}
+  &.font-medium {
+    font-weight: 500;
+  }
 
-	&.font-regular {
-		font-weight: 400;
-	}
+  &.font-regular {
+    font-weight: 400;
+  }
 
-	&.break-word {
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-	}
+  &.break-word {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  a {
+    color: rgb(51, 224, 255);
+  }
+
+  a:visited {
+    color: rgb(48, 196, 181);
+  }
 }
