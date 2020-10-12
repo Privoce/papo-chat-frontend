@@ -20,7 +20,7 @@ import { bindActionCreators } from 'redux';
 import constants from 'modules/constants';
 import * as conversationActions from 'redux/actions/conversation';
 import * as messageActions from 'redux/actions/message';
-import logoalora from 'assets/images/logoalora.gif';
+import logoalora from 'assets/images/logo.png';
 
 class ChatWrapper extends Component {
   constructor(props) {

@@ -8,7 +8,7 @@
   },
   "LABELS": {
     "MAIN": {
-      "APP_NAME": "Alora",
+      "APP_NAME": "Papo Chat",
       "GLOBAL_ERROR": "Sorry, we've run into a problem :( try again later",
       "NO": "no",
       "YES": "yes"
@@ -19,7 +19,7 @@
       "CONFIRM_PASSWORD": "Confirm password",
       "ALREADY_HAVE_ACCOUNT": "Already have an account?",
       "DONT_HAVE_AN_ACCOUNT": "Don't have an account?",
-      "SIGNIN": "Alora",
+      "SIGNIN": "Papo Chat",
       "SIGNUP": "Sign Up",
       "PLEASE_ENTER_YOUR_PASSWORD": "Please, enter your password",
       "PLEASE_ENTER_YOUR_NICKNAME": "Please, enter your nickname",
