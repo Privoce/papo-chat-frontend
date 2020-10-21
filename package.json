@@ -24,6 +24,7 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "3.4.3",
+    "react-tiny-fab": "^4.0.1",
     "react-toastify": "^4.5.2",
     "react-transition-group": "^2.5.3",
     "redux": "^4.0.1",

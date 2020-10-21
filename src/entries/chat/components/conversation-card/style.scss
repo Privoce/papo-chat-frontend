@@ -1,29 +1,29 @@
 .conversation-card {
-	position: relative;
-	padding-left: 25px;
-	transition: background .5s ease;
-	cursor: pointer;
-	outline: none;
+  position: relative;
+  padding-left: 25px;
+  transition: background 0.5s ease;
+  cursor: pointer;
+  outline: none;
 
-	&:hover {
-		background: $brand-secondary;
-	}
+  &:hover {
+    background: $brand-secondary;
+  }
 
-	&.active {
-		background: $brand-tertiary-ligth;
-	}
+  &.active {
+    background: #f2f2f2;
+  }
 
-	.conversation-card--container {
-		padding: 15px 25px 15px 0px;
-		border-top: 1px solid #f2f2f2;
-		display: flex;
-		justify-content: space-between;
-		height: 80px;
-		max-height: 80px;
+  .conversation-card--container {
+    padding: 15px 25px 15px 0px;
+    border-top: 1px solid #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    max-height: 80px;
 
-		.user-info-sketch-container {
-			display: flex;
-			align-items: center;
-		}
-	}
+    .user-info-sketch-container {
+      display: flex;
+      align-items: center;
+    }
+  }
 }

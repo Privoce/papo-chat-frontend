@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 
 import 'styles/index.scss';
 import 'emoji-mart/css/emoji-mart.css';
+import 'react-tiny-fab/dist/styles.css';
 
 import * as serviceWorker from 'serviceWorker';
 

@@ -27,20 +27,29 @@ function StartCallWindow({ startCall, image, conversationData, cancel }) {
 
   return (
     <div className="start-call-container">
+      <h2>{currentUser.nickname || 'Usuario'}</h2>
+      <p>Incoming Call</p>
       <img src={image || placeholderImg} alt="User profile" />
-      <h2>Ligar para</h2>
-      <p>{currentUser.nickname || 'Usuario'}</p>
       <div className="button-container">
-        <button type="button" onClick={() => startCall('audio')}>
-          <MdCall />
-        </button>
-        <button type="button" onClick={() => startCall('video')}>
-          <MdCameraAlt />
-        </button>
-        <button type="button" onClick={cancel}>
+        <button className="button-cancelcall" type="button" onClick={cancel}>
           <MdCancel />
         </button>
+
+        <button
+          className="button-videocall"
+          type="button"
+          onClick={() => startCall('video')}
+        >
+          <MdCameraAlt />
+        </button>
       </div>
+      <button
+        className="button-audiocall"
+        type="button"
+        onClick={() => startCall('audio')}
+      >
+        <MdCall />
+      </button>
     </div>
   );
 }

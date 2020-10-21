@@ -2,11 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import { Picker } from 'emoji-mart';
 import PropTypes, { func } from 'prop-types';
-import { Container, Button, Link } from 'react-floating-action-button';
-import { AiOutlineMore } from 'react-icons/ai';
 import { FiSend } from 'react-icons/fi';
+import { GrEmoji } from 'react-icons/gr';
 import { HiEmojiHappy } from 'react-icons/hi';
-import { MdCall } from 'react-icons/md';
+import { MdCall, MdAttachment, MdTagFaces, MdSend } from 'react-icons/md';
+import { Fab, Action } from 'react-tiny-fab';
 import useOnClickOutside from 'use-onclickoutside';
 
 function ContentEditableComponent({
@@ -51,33 +51,35 @@ function ContentEditableComponent({
 
   return (
     <>
-      <Container>
-        <Link href="#" tooltip="Create note link" icon="far fa-sticky-note" />
-        <Link
-          href="#"
-          tooltip="Add user link"
-          icon="fas fa-user-plus"
-          className="fab-item btn btn-link btn-lg text-white"
-        />
-        <Button tooltip="The big plus button!" rotate>
-          <AiOutlineMore />
-        </Button>
-      </Container>
       <button
         type="button"
         className="emoji-button"
         onClick={toggleEmojiWindow}
       >
-        <HiEmojiHappy />
+        <MdTagFaces />
       </button>
-
-      <button
-        type="button"
-        className="call-button icon-footer"
-        onClick={handleCall}
+      <Fab
+        mainButtonStyles={{
+          background: '#fff',
+          color: '#4064d1',
+          boxShadow: 'none',
+          fontSize: 28,
+          margin: 0,
+          padding: 0,
+        }}
+        actionButtonStyles={{ margin: 0, padding: 0, background: '#4064d1' }}
+        style={{
+          position: 'relative',
+          padding: 0,
+          margin: 20,
+        }}
+        icon={<MdAttachment />}
+        alwaysShowTitle
       >
-        <MdCall />
-      </button>
+        <Action color="#4064d1" text="Call" onClick={handleCall}>
+          <MdCall />
+        </Action>
+      </Fab>
       <div
         contentEditable
         className="content-editable"
@@ -89,15 +91,13 @@ function ContentEditableComponent({
         tabIndex="-1"
         placeholder="Type a message here..."
       />
-
       <button
         type="button"
         className="message-button icon-footer"
         onClick={handleEnter}
       >
-        <FiSend />
+        <MdSend />
       </button>
-
       {showEmojis && (
         <div ref={emojiWindow}>
           <Picker
