@@ -67,16 +67,21 @@ function ContentEditableComponent({
           margin: 0,
           padding: 0,
         }}
-        actionButtonStyles={{ margin: 0, padding: 0, background: '#4064d1' }}
+        actionButtonStyles={{ margin: 0, padding: 0 }}
         style={{
           position: 'relative',
           padding: 0,
           margin: 20,
+          zIndex: 30,
         }}
         icon={<MdAttachment />}
         alwaysShowTitle
       >
-        <Action color="#4064d1" text="Call" onClick={handleCall}>
+        <Action
+          text="Call"
+          onClick={handleCall}
+          className="fab-callaction-button"
+        >
           <MdCall />
         </Action>
       </Fab>

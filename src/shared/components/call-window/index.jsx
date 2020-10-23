@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { Rnd } from 'react-rnd';
+
+import noImage from 'assets/images/no-picture.png';
 
 import './styles.scss';
 
@@ -20,6 +23,9 @@ function CallWindow({
   const localVideo = useRef(null);
   const [video, setVideo] = useState(config.video);
   const [audio, setAudio] = useState(config.audio);
+  const [clientVideo, setClientVideo] = useState(false);
+
+  const videoCallData = useSelector((state) => state.videoCall);
 
   useEffect(() => {
     if (peerVideo.current && peerSrc) {
@@ -29,6 +35,15 @@ function CallWindow({
     if (localVideo.current && localSrc) {
       localVideo.current.srcObject = localSrc;
     }
+
+    videoCallData.socket.on('toggle-video', (data) => {
+      console.log('caboclo fez', data);
+      if (data.status) {
+        setClientVideo(true);
+      } else {
+        setClientVideo(false);
+      }
+    });
   });
 
   useEffect(() => {
@@ -55,8 +70,35 @@ function CallWindow({
 
   return (
     <div className={classnames('call-window', status)}>
-      <video id="peerVideo" ref={peerVideo} autoPlay />
-      <video id="localVideo" ref={localVideo} autoPlay muted />
+      <Rnd
+        className={clientVideo ? '' : 'hidden'}
+        default={{
+          x: window.innerWidth / 6,
+          y: 50,
+          width: '70%',
+          height: '90%',
+        }}
+      >
+        <video id="peerVideo" ref={peerVideo} autoPlay />
+      </Rnd>
+
+      <div className={`user-call-image ${clientVideo ? 'hidden' : ''}`}>
+        <img src={noImage} alt="User" />
+      </div>
+
+      {video && (
+        <Rnd
+          default={{
+            x: window.innerWidth - 400,
+            y: window.innerHeight - 200,
+            width: '20%',
+            height: '20%',
+          }}
+        >
+          <video id="localVideo" ref={localVideo} autoPlay muted />
+        </Rnd>
+      )}
+
       <div className="video-control">
         <button
           id="btnVideo"
@@ -81,17 +123,5 @@ function CallWindow({
     </div>
   );
 }
-
-CallWindow.propTypes = {
-  status: PropTypes.string.isRequired,
-  localSrc: PropTypes.object, // eslint-disable-line
-  peerSrc: PropTypes.object, // eslint-disable-line
-  config: PropTypes.shape({
-    audio: PropTypes.bool.isRequired,
-    video: PropTypes.bool.isRequired,
-  }).isRequired,
-  mediaDevice: PropTypes.object, // eslint-disable-line
-  endCall: PropTypes.func.isRequired,
-};
 
 export default CallWindow;
