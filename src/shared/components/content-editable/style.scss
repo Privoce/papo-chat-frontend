@@ -1,7 +1,7 @@
 .content-editable {
   background: $brand-secondary;
   border-radius: 50px;
-  color: #fff;
+  color: #444;
   width: 85%;
   padding: 10px 20px 10px 20px;
   max-height: 80px;
@@ -17,6 +17,10 @@
   font-size: 22px;
   padding: 30px;
   color: #4064d1;
+}
+
+.message-icon {
+  cursor: pointer;
 }
 
 .emoji-button {

@@ -18,6 +18,7 @@ function ContentEditableComponent({
   const contentEditable = useRef(null);
   const emojiWindow = useRef(null);
   const [showEmojis, setShowEmojis] = useState(false);
+  let emojisShowing = false;
 
   useEffect(() => {
     contentEditable.current.textContent = '';
@@ -78,9 +79,11 @@ function ContentEditableComponent({
         alwaysShowTitle
       >
         <Action
-          text="Call"
           onClick={handleCall}
           className="fab-callaction-button"
+          style={{
+            background: '#0838C7'
+          }}
         >
           <MdCall />
         </Action>
@@ -101,13 +104,15 @@ function ContentEditableComponent({
         className="message-button icon-footer"
         onClick={handleEnter}
       >
-        <MdSend />
+        <MdSend
+          className="message-icon"
+        />
       </button>
       {showEmojis && (
         <div ref={emojiWindow}>
           <Picker
             onSelect={setEmoji}
-            style={{ position: 'absolute', bottom: '20px', right: '20px' }}
+            style={{ position: 'absolute', bottom: '90px', left: '20px' }}
             showPreview={false}
             emojiTooltip={false}
             title=""

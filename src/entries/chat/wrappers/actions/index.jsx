@@ -184,44 +184,23 @@ function ActionsWrapper() {
             }}
           />
           <div>
-            <ButtonComponent
-              type="button"
-              width={26}
-              height={26}
-              link
-              onClick={handleOpenAddContact}
-            >
-              <IconComponent
-                fill="#555657"
-                icon="account-plus"
-                width={26}
-                height={26}
-              />
-            </ButtonComponent>
-            <ButtonComponent
-              type="button"
-              width={26}
-              height={26}
-              margin="0px 0px 0px 20px"
-              link
-              onClick={handleOpenNewConversation}
-            >
-              <IconComponent
-                fill="#555657"
-                icon="message-text"
-                width={26}
-                height={26}
-              />
-            </ButtonComponent>
             <DropDownMenuComponent
               options={[
+                {
+                  text: constants.LABELS.CHAT.ADD_CONTACT,
+                  event: handleOpenAddContact,
+                },
+                {
+                  text: constants.LABELS.CHAT.CONTACT_LIST,
+                  event: handleOpenNewConversation,
+                },
                 {
                   text: constants.LABELS.CHAT.LOGOUT,
                   event: handleLogout,
                 },
               ]}
               icon={{
-                fill: '#555657',
+                fill: '#4064D1',
                 icon: 'dots-vertical',
                 width: 26,
                 height: 26,
