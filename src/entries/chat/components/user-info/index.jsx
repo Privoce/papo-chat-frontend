@@ -90,7 +90,7 @@ export default class UserInfoComponent extends Component {
       <div className="user-info-wrapper" style={wrapperStyle}>
         <div className={userInfoContainerStyles}>
           <ProfilePictureComponent {...profile} />
-          <div className="labels-container">
+          <div className="labels-container username-container">
             <LabelComponent fontSemiBold dark breakWord {...title} />
             <LabelComponent fontRegular dark breakWord {...desc} />
           </div>

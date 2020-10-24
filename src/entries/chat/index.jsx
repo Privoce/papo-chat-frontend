@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { MdCall, MdCallEnd } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import { ActionsWrapper, ChatWrapper } from 'entries/chat/wrappers';
 import {
@@ -21,7 +21,9 @@ import { getUser } from 'modules/utils';
 
 import * as socketActions from 'redux/actions/socket';
 import * as videoCallActions from 'redux/actions/videoCall';
-import profilePlaceholder from '../../assets/images/no-picture.png';
+
+//call timeout in seconds
+const CALL_TIME_OUT = 20;
 
 class HomeEntry extends Component {
   constructor() {
@@ -36,7 +38,11 @@ class HomeEntry extends Component {
       peerSrc: null,
       started: false,
       newCall: false,
+      acepted: false,
+      iStartedCall: false,
+      partnerIsOnline: false,
     };
+    this.callTimeOut = null;
     this.pc = {};
     this.config = null;
     this.startCallHandler = this.startCall.bind(this);
@@ -52,6 +58,15 @@ class HomeEntry extends Component {
 
   componentDidUpdate() {
     const { videoCallData } = this.props;
+    const { conversationData } = this.props;
+    const { currentPartnerIdConversation } = conversationData;
+
+    // make a request to check if user is online
+    if (videoCallData.socket && currentPartnerIdConversation) {
+      videoCallData.socket.emit('isOnline', {
+        userId: currentPartnerIdConversation,
+      });
+    }
 
     if (
       !this.state.started &&
@@ -60,14 +75,35 @@ class HomeEntry extends Component {
     ) {
       videoCallData.socket
         .on('call', (data) => {
-          if (data.sdp) {
+          if (data.sdp && this.pc.setRemoteDescription) {
+            this.setState({ acepted: true });
             this.pc.setRemoteDescription(data.sdp);
             if (data.sdp.type === 'offer') this.pc.createAnswer();
-          } else {
+          } else if (this.pc && this.pc.addIceCandidate) {
             this.pc.addIceCandidate(data.candidate);
           }
         })
-        .on('end', this.endCall.bind(this, false));
+        .on('end', (data) => {
+          console.log('end');
+          let timeout = false;
+          if (data) {
+            timeout = data.timeout;
+          }
+          this.endCallHandler(false, timeout);
+        })
+        .on('isOnline', (data) => {
+          if (data.status === 'online') {
+            if (this.state.partnerIsOnline) {
+              return;
+            }
+            this.setState({ partnerIsOnline: true });
+          } else {
+            if (!this.state.partnerIsOnline) {
+              return;
+            }
+            this.setState({ partnerIsOnline: false });
+          }
+        });
 
       this.setState({
         started: true,
@@ -76,6 +112,7 @@ class HomeEntry extends Component {
   }
 
   startCall(isCaller, friendID, config) {
+    this.setState({ iStartedCall: true });
     this.config = config;
     this.pc = new PeerConnection(friendID)
       .on('localStream', (src) => {
@@ -85,26 +122,43 @@ class HomeEntry extends Component {
       })
       .on('peerStream', (src) => {
         this.setState({ peerSrc: src });
+        clearTimeout(this.callTimeOut);
       })
       .start(isCaller, config, getUser());
   }
 
-  rejectCall() {
-    const { videoCallData } = this.props;
-    const { calling, user } = videoCallData;
+  rejectCall(timeout) {
+    const { videoCallData, videoCallActions } = this.props;
+    const { user } = videoCallData;
 
-    videoCallData.socket.emit('end', { to: user._id });
-    this.setState({ callModal: '' });
+    videoCallData.socket.emit('end', {
+      to: user._id,
+      timeout: timeout | false,
+    });
 
-    const { videoCallActions } = this.props;
+    // this.setState({ callModal: '' });
 
     videoCallActions.closedVideoCall();
   }
 
-  endCall(isStarter) {
+  endCall(isStarter, timeout) {
+    const { acepted } = this.state;
+    const { videoCallData } = this.props;
+    const { calling } = videoCallData;
+
+    clearTimeout(this.callTimeOut);
+
     if (_.isFunction(this.pc.stop)) {
       this.pc.stop(isStarter);
     }
+
+    // if is calling and not accepted yet,
+    // end the call
+    if (!acepted && calling) {
+      this.rejectCallHandler(timeout);
+    }
+
+    this.setState({ acepted: false, iStartedCall: false });
 
     this.pc = {};
     this.config = null;
@@ -113,9 +167,8 @@ class HomeEntry extends Component {
       callModal: '',
       localSrc: null,
       peerSrc: null,
+      newCall: false,
     });
-
-    this.handleCancelCall();
   }
 
   handleInitiateCall = () => {
@@ -125,6 +178,19 @@ class HomeEntry extends Component {
   handleCallStart = (mode) => {
     const { conversationData } = this.props;
     const { currentPartnerIdConversation } = conversationData;
+
+    this.callTimeOut = setTimeout(() => {
+      this.handleCancelCall(true);
+      toast.error('Chamada não atendida', {
+        position: 'bottom-right',
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      });
+    }, CALL_TIME_OUT * 1000);
 
     let config = {};
     if (mode === 'audio') {
@@ -152,14 +218,21 @@ class HomeEntry extends Component {
     videoCallActions.acceptedVideoCall();
   };
 
-  handleCancelCall = () => {
-    this.setState({ newCall: false });
+  handleCancelCall = (timeout) => {
+    this.endCall(true, timeout);
   };
 
   render() {
     const { videoCallData } = this.props;
     const { calling, user } = videoCallData;
-    const { localSrc, peerSrc, newCall } = this.state;
+    const {
+      localSrc,
+      peerSrc,
+      newCall,
+      acepted,
+      iStartedCall,
+      partnerIsOnline,
+    } = this.state;
 
     const { conversationData } = this.props;
 
@@ -172,11 +245,12 @@ class HomeEntry extends Component {
             handleCancelCall={this.rejectCallHandler}
           />
         )}
-        {newCall && (
+        {newCall && !acepted && (
           <StartCallWindow
             startCall={this.handleCallStart}
             conversationData={conversationData}
             cancel={this.handleCancelCall}
+            calling={iStartedCall}
           />
         )}
         <div
@@ -186,9 +260,12 @@ class HomeEntry extends Component {
         />
         <div className={`chat-wrapper ${calling && 'call-blur'}`}>
           <ActionsWrapper />
-          <ChatWrapper startCall={this.handleInitiateCall} />
+          <ChatWrapper
+            startCall={this.handleInitiateCall}
+            isOnline={partnerIsOnline}
+          />
         </div>
-        {!_.isEmpty(this.config) && (
+        {!_.isEmpty(this.config) && acepted && (
           <CallWindowComponent
             status="calling"
             localSrc={localSrc}
