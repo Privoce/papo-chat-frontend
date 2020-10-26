@@ -18,7 +18,7 @@ function ContentEditableComponent({
   const contentEditable = useRef(null);
   const emojiWindow = useRef(null);
   const [showEmojis, setShowEmojis] = useState(false);
-  let emojisShowing = false;
+  const emojisShowing = false;
 
   useEffect(() => {
     contentEditable.current.textContent = '';
@@ -82,7 +82,7 @@ function ContentEditableComponent({
           onClick={handleCall}
           className="fab-callaction-button"
           style={{
-            background: '#0838C7'
+            background: '#0838C7',
           }}
         >
           <MdCall />
@@ -101,12 +101,10 @@ function ContentEditableComponent({
       />
       <button
         type="button"
-        className="message-button icon-footer"
-        onClick={handleEnter}
+        className="emoji-button"
+        onClick={toggleEmojiWindow}
       >
-        <MdSend
-          className="message-icon"
-        />
+        <MdSend className="message-icon" />
       </button>
       {showEmojis && (
         <div ref={emojiWindow}>

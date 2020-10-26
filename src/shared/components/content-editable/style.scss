@@ -1,5 +1,7 @@
 .content-editable {
-  background: $brand-secondary;
+  background: #f8f8f8;
+  box-shadow: 20px 20px 60px rgba(133, 130, 137, 0.25),
+    -20px -20px 60px rgba(211, 201, 201, 0.15);
   border-radius: 50px;
   color: #444;
   width: 85%;
@@ -13,10 +15,47 @@
   word-wrap: break-word;
 }
 
-.icon-footer {
-  font-size: 22px;
-  padding: 30px;
+.call-button {
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
   color: #4064d1;
+  margin-right: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.emoji-button {
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  color: #4064d1;
+  margin-left: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.message-button {
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  color: #4064d1;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.content-editable[contentEditable='true']:empty:not(:focus):before {
+  content: attr(placeholder);
+}
+
+.content-editable[contentEditable='true']:empty:before {
+  content: attr(placeholder);
 }
 
 .message-icon {

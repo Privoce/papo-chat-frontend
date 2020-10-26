@@ -6,7 +6,13 @@ import { MdCall, MdCameraAlt, MdCancel } from 'react-icons/md';
 
 import placeholderImg from '../../../assets/images/no-picture.png';
 
-function StartCallWindow({ startCall, image, conversationData, cancel }) {
+function StartCallWindow({
+  startCall,
+  image,
+  conversationData,
+  cancel,
+  calling,
+}) {
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -19,8 +25,6 @@ function StartCallWindow({ startCall, image, conversationData, cancel }) {
       (item) =>
         String(item.partnerId._id) === String(currentPartnerIdConversation)
     );
-
-    console.log(currentConversation.partnerId);
 
     setCurrentUser(currentConversation.partnerId);
   }, [conversationData]);
