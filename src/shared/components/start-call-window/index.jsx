@@ -31,30 +31,29 @@ function StartCallWindow({
 
   return (
     <div className="start-call-container">
+      <h2>{currentUser.nickname || 'Usuario'}</h2>
+      <p>Incoming Call</p>
       <img src={image || placeholderImg} alt="User profile" />
-      <h2>{calling ? 'Calling to:' : 'Call to'}</h2>
-      <p>{currentUser.nickname || 'Usuario'}</p>
       <div className="button-container">
-        <button
-          type="button"
-          disabled={calling}
-          className={calling ? 'disabled' : ''}
-          onClick={() => startCall('audio')}
-        >
-          <MdCall />
+        <button className="button-cancelcall" type="button" onClick={cancel}>
+          <MdCancel />
         </button>
+
         <button
+          className="button-videocall"
           type="button"
-          disabled={calling}
-          className={calling ? 'disabled' : ''}
           onClick={() => startCall('video')}
         >
           <MdCameraAlt />
         </button>
-        <button type="button" onClick={() => cancel()}>
-          <MdCancel />
-        </button>
       </div>
+      <button
+        className="button-audiocall"
+        type="button"
+        onClick={() => startCall('audio')}
+      >
+        <MdCall />
+      </button>
     </div>
   );
 }

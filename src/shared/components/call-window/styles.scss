@@ -9,8 +9,7 @@ $fa-font-path: '~font-awesome/fonts';
   height: 100vh;
   opacity: 1;
   z-index: 999;
-  background-color: #0093e9;
-  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+  background-color: #4064d1;
 
   &.active {
     opacity: 1;
@@ -80,7 +79,7 @@ $fa-font-path: '~font-awesome/fonts';
       transition-duration: 0.25s;
 
       &:hover {
-        opacity: 0.8;
+        //opacity: 0.8;
       }
 
       &.hangup {
@@ -88,7 +87,7 @@ $fa-font-path: '~font-awesome/fonts';
       }
 
       &:not(.hangup) {
-        background-color: rgb(16, 118, 165);
+        background-color: #4064d1;
 
         &.disable {
           background-color: #f33;

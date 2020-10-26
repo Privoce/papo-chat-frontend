@@ -1,25 +1,16 @@
 .conversation-card {
   position: relative;
   padding-left: 25px;
-  transition: all 0.3s ease-in-out;
+  transition: background 0.5s ease;
   cursor: pointer;
   outline: none;
-  background-color: #fff;
-  width: 90%;
-  box-shadow: 16px 20px 20px rgba(133, 130, 137, 0.25);
 
   &:hover {
     background: $brand-secondary;
   }
 
   &.active {
-    background: transparent;
-    border: none !important;
-    box-shadow: none;
-  }
-
-  &.active > .conversation-card--container {
-    border: none !important;
+    background: #f2f2f2;
   }
 
   .conversation-card--container {
@@ -35,21 +26,4 @@
       align-items: center;
     }
   }
-}
-
-.top-conner-radius {
-  border-top-right-radius: 50px;
-  box-shadow: 16px -10px 20px rgba(133, 130, 137, 0.25);
-  .conversation-card--container {
-    border: none !important;
-  }
-}
-
-.bottom-conner-radius {
-  border-bottom-right-radius: 50px;
-  box-shadow: 16px 20px 20px rgba(133, 130, 137, 0.25);
-}
-
-.conversation-card:last-child {
-  border-bottom-right-radius: 50px;
 }

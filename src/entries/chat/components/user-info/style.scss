@@ -8,7 +8,7 @@
     position: relative;
 
     &.column {
-      flex-direction: column;
+      flex-direction: row;
     }
 
     .labels-container {
@@ -24,6 +24,11 @@
         margin-left: 10px;
         background-color: rgb(35, 133, 10);
       }
+    }
+
+    .username-container {
+      margin-left: 10px;
+      margin-top: 5px;
     }
   }
 

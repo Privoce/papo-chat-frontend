@@ -3,8 +3,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 20px;
-  padding-top: 0;
 
   & > span {
     margin-top: 5px;
@@ -13,30 +11,23 @@
   .input-container {
     position: relative;
 
-    input:-internal-autofill-selected {
-      background-color: #ededed !important;
-    }
     .input {
+      border: none;
       height: 50px;
       padding: 0px 20px 0px 20px;
-      font-size: 13px;
-      font-weight: unset;
+      font-size: 16px;
+      font-weight: 600;
       width: 100%;
-      background: #ededed;
-      box-shadow: inset 4px 4px 10px rgba(165, 162, 168, 0.25),
-        inset -3px -3px 14px #fbfbfb;
-      border-radius: 50px;
 
       &::-ms-clear {
         display: none;
       }
 
       &.default {
-        background: #ededed;
-        box-shadow: inset 4px 4px 10px rgba(138, 133, 143, 0.25),
-          inset -3px -3px 14px #fbfbfb;
-        border-radius: 50px;
-        border-color: transparent;
+        background: $brand-secondary;
+        border-radius: 4px;
+        color: $brand-text;
+
         &::-webkit-input-placeholder {
           color: $brand-text;
           font-weight: 400;
@@ -69,10 +60,10 @@
       }
 
       &.search {
-        border: none;
+        background: #fff;
         color: $brand-text-dark;
-        height: 40px;
-        padding: 0px 20px 0px 20px;
+        height: 55px;
+        padding: 0px 40px 0px 60px;
       }
 
       &.clean {

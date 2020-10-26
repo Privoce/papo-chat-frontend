@@ -3,10 +3,11 @@
   box-shadow: 20px 20px 60px rgba(133, 130, 137, 0.25),
     -20px -20px 60px rgba(211, 201, 201, 0.15);
   border-radius: 50px;
-  color: $brand-text;
-  width: 80%;
-  padding: 15px 5px 5px 20px;
-  height: 50px;
+  color: #444;
+  width: 85%;
+  padding: 10px 20px 10px 20px;
+  max-height: 80px;
+  min-height: 46px;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -55,4 +56,23 @@
 
 .content-editable[contentEditable='true']:empty:before {
   content: attr(placeholder);
+}
+
+.message-icon {
+  cursor: pointer;
+}
+
+.emoji-button {
+  svg {
+    font-size: 28px;
+    color: #4064d1;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fab-callaction-button {
+  background-color: #4064d1;
 }
