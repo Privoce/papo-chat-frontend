@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "auth0-react": "^3.1.0",
     "classnames": "^2.2.6",
     "emoji-mart": "^3.0.0",
     "font-awesome": "4.7.0",

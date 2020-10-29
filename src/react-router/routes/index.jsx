@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import { SignUpEntry, SignInEntry, ChatEntry } from 'entries';
+import { Auth0, ChatEntry } from 'entries';
 import { getToken } from 'modules/utils';
 import { AppContainer } from 'shared/containers';
 
@@ -68,8 +68,8 @@ function RoutesContainer({ location }) {
                 component={ChatEntry}
                 protectedRoute
               />
-              <CustomRoute exact path="/signin" component={SignInEntry} />
-              <CustomRoute exact path="/signup" component={SignUpEntry} />
+              <CustomRoute exact path="/signin" component={Auth0} />
+              <CustomRoute exact path="/signup" component={Auth0} />
             </Switch>
           </section>
         </CSSTransition>
