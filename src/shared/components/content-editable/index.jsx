@@ -1,10 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import { Picker } from 'emoji-mart';
-import PropTypes, { func } from 'prop-types';
-import { FiSend } from 'react-icons/fi';
-import { GrEmoji } from 'react-icons/gr';
-import { HiEmojiHappy } from 'react-icons/hi';
+import PropTypes from 'prop-types';
 import { MdCall, MdAttachment, MdTagFaces, MdSend } from 'react-icons/md';
 import { Fab, Action } from 'react-tiny-fab';
 import useOnClickOutside from 'use-onclickoutside';
@@ -77,6 +74,7 @@ function ContentEditableComponent({
         }}
         icon={<MdAttachment />}
         alwaysShowTitle
+        event="click"
       >
         <Action
           onClick={handleCall}
