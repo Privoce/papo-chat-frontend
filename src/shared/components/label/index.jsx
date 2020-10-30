@@ -59,10 +59,30 @@ function LabelComponent({
     }
 
     if (isValidURL(string)) {
+      // get the start of url (http(s) or www)
+      const start =
+        string.search('http') > 0
+          ? string.search('http')
+          : string.search('www');
+
+      // get the end of url: the blank space after url
+      const end =
+        string.slice(start).search(' ') > 1
+          ? string.slice(start).search(' ')
+          : string.length;
+
+      const url = string.slice(start, end + start);
+
+      const normalText = string.split(url);
+
       return (
-        <a href={string} target="_blank" rel="noreferrer">
-          {string}
-        </a>
+        <>
+          {normalText[0]}
+          <a href={url} target="_blank" rel="noreferrer">
+            {url}
+          </a>
+          {normalText[1]}
+        </>
       );
     }
 

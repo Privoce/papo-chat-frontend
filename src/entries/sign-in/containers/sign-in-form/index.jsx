@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import {
+  FacebookLoginButton,
+  GoogleLoginButton,
+} from 'react-social-login-buttons';
 
 import {
   ButtonComponent,
   InputComponent,
   FormComponent,
-  FlashMessageComponent
+  FlashMessageComponent,
 } from 'shared/components';
 
 import { connect } from 'react-redux';
@@ -13,6 +17,8 @@ import { bindActionCreators } from 'redux';
 
 import constants from 'modules/constants';
 import * as authActions from 'redux/actions/auth';
+
+import './styles.scss';
 
 class SignInFormContainer extends Component {
   onCloseFlashMessage = () => {
@@ -37,12 +43,12 @@ class SignInFormContainer extends Component {
         formName="SignInForm"
         values={{
           nickname: '',
-          password: ''
+          password: '',
         }}
-        handleSubmit={values => {
+        handleSubmit={(values) => {
           if (!signIn.isFetching) {
             const params = {
-              body: values
+              body: values,
             };
 
             postSignIn(params);
@@ -54,6 +60,7 @@ class SignInFormContainer extends Component {
               {errors.nickname ? (
                 <FlashMessageComponent
                   width={280}
+                  margin="10px 0px"
                   message={errors.nickname}
                   onClose={this.onCloseFlashMessage}
                   error
@@ -90,6 +97,15 @@ class SignInFormContainer extends Component {
                 width={280}
                 disabled={false}
               />
+              <p className="social-buttons--label">- or -</p>
+              <FacebookLoginButton
+                style={{ margin: 0, marginTop: 10, width: '100%' }}
+                disabled
+              />
+
+              <GoogleLoginButton
+                style={{ margin: 0, marginTop: 10, width: '100%' }}
+              />
             </form>
           );
         }}
@@ -98,15 +114,15 @@ class SignInFormContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    authData: state.auth
+    authData: state.auth,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    authActions: bindActionCreators(authActions, dispatch)
+    authActions: bindActionCreators(authActions, dispatch),
   };
 };
 
