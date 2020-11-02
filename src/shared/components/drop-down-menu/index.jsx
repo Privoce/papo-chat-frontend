@@ -2,8 +2,8 @@
 import React, { useState, useRef } from 'react';
 
 import PropTypes from 'prop-types';
-import onClickOutside from 'react-onclickoutside';
 import { Manager, Reference, Popper } from 'react-popper';
+import useOnClickOutside from 'use-onclickoutside';
 
 import ButtonComponent from 'shared/components/button';
 import IconComponent from 'shared/components/icon';
@@ -14,6 +14,10 @@ const DropDownMenuComponent = ({ onChange, options, icon, marginButton }) => {
   const dropDownWrapper = useRef(null);
 
   function changeDropDownStatus(toggle, newIsOpen) {
+    if (toggle === isOpen) {
+      return;
+    }
+
     const isOpenState = toggle ? !isOpen : newIsOpen;
 
     if (onChange) {
@@ -23,15 +27,15 @@ const DropDownMenuComponent = ({ onChange, options, icon, marginButton }) => {
     setIsOpen(isOpenState);
   }
 
-  DropDownMenuComponent.handleClickOutside = (event) => {
+  function handleClickOutside(event) {
     if (dropDownWrapper.current) {
       if (!dropDownWrapper.current.contains(event.target)) {
-        if (isOpen) {
-          changeDropDownStatus(false, false);
-        }
+        changeDropDownStatus(false, false);
       }
     }
-  };
+  }
+
+  useOnClickOutside(dropDownWrapper, handleClickOutside);
 
   return (
     <div ref={dropDownWrapper} className="drop-down-menu-wrapper">
@@ -110,4 +114,4 @@ DropDownMenuComponent.defaultProps = {
   onChange: () => {},
 };
 
-export default onClickOutside(DropDownMenuComponent, clickOutsideConfig);
+export default DropDownMenuComponent;
