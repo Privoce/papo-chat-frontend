@@ -18,8 +18,8 @@ function* aceptVideoCall(action) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}/secured/videoCall-acept`,
-      method: constants.API.METHODS.POST,
+      url: `${process.env.ROOT}/secured/videoCall-acept`,
+      method: process.env.POST,
       body,
     });
 

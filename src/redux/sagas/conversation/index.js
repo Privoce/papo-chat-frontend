@@ -18,8 +18,8 @@ import constants from "modules/constants";
 function* getConversationsFetch() {
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
-			method: constants.API.METHODS.GET
+			url: `${process.env.ROOT}${process.env.CONVERSATION}`,
+			method: process.env.GET
 		});
 
 		yield put(
@@ -49,8 +49,8 @@ function* resetConversationUnreadtMessagesSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
-			method: constants.API.METHODS.PUT,
+			url: `${process.env.ROOT}${process.env.CONVERSATION}`,
+			method: process.env.PUT,
 			body
 		});
 	} catch (e) {
@@ -81,8 +81,8 @@ function* deleteConversationFetchSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
-			method: constants.API.METHODS.DELETE,
+			url: `${process.env.ROOT}${process.env.CONVERSATION}`,
+			method: process.env.DELETE,
 			body
 		});
 

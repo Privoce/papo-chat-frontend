@@ -33,8 +33,8 @@ function* addContactPostFetch (props) {
 
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONTACT}`,
-			method: constants.API.METHODS.POST,
+			url: `${process.env.ROOT}${process.env.CONTACT}`,
+			method: process.env.POST,
 			body
 		});
 
@@ -55,8 +55,8 @@ function* addContactPostFetch (props) {
 function* getContactsGetFetch () {
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONTACT}`,
-			method: constants.API.METHODS.GET
+			url: `${process.env.ROOT}${process.env.CONTACT}`,
+			method: process.env.GET
 		});
 
 		yield put(contactActions.getContactsReceived({
@@ -79,8 +79,8 @@ function* deleteContactFetchSaga (action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONTACT}`,
-			method: constants.API.METHODS.DELETE,
+			url: `${process.env.ROOT}${process.env.CONTACT}`,
+			method: process.env.DELETE,
 			body
 		});
 

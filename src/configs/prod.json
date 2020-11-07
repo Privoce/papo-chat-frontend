@@ -1,11 +1,4 @@
 {
-  "GLOBAL": {
-    "USER_COOKIE_KEY": "user",
-    "USER_COOKIE_EXPIRES": 7,
-    "TOKEN_COOKIE_KEY": "token",
-    "TOKEN_COOKIE_EXPIRES": 7,
-    "MESSAGE_RECEIVED_MP3": "message-received.mp3"
-  },
   "LABELS": {
     "MAIN": {
       "APP_NAME": "Papo Chat",
@@ -45,23 +38,6 @@
       "CONTACT_SUCCESSFULLY_ADDED": "Contact successfully added",
       "DELETE_CONTACT": "delete contact",
       "DELETE_CONTACT_CONFIRM": "Delete contact?"
-    }
-  },
-  "API": {
-    "ROOT": "https://api.privoce.com",
-    "ACTIONS": {
-      "AUTH_SIGNUP": "/auth/signup",
-      "AUTH_SIGNIN": "/auth/signin",
-      "VERIFY_NICKNAME": "/auth/verify-nickname",
-      "CONTACT": "/secured/contact",
-      "MESSAGE": "/secured/message",
-      "CONVERSATION": "/secured/conversation"
-    },
-    "METHODS": {
-      "POST": "POST",
-      "PUT": "PUT",
-      "GET": "GET",
-      "DELETE": "DELETE"
     }
   }
 }
