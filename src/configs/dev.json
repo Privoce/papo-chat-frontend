@@ -44,7 +44,7 @@
     }
   },
   "API": {
-    "URL": "https://alora-chat-backend.herokuapp.com",
+    "URL": "https://api.privoce.com",
     "ACTIONS": {
       "AUTH_SIGNUP": "/auth/signup",
       "AUTH_SIGNIN": "/auth/signin",
