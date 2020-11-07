@@ -18,7 +18,7 @@ function* signInPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.AUTH_SIGNIN}`,
+      url: `${constants.API.URL}${constants.API.ACTIONS.AUTH_SIGNIN}`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -45,7 +45,7 @@ function* signUpPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.AUTH_SIGNUP}`,
+      url: `${constants.API.URL}${constants.API.ACTIONS.AUTH_SIGNUP}`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -75,7 +75,7 @@ function* verifyNicknameGetFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
+      url: `${constants.API.URL}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
       method: constants.API.METHODS.GET,
       query: body,
     });

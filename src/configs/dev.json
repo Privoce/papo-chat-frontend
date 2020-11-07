@@ -1,9 +1,5 @@
 {
   "GLOBAL": {
-    "USER_COOKIE_KEY": "user",
-    "USER_COOKIE_EXPIRES": 7,
-    "TOKEN_COOKIE_KEY": "token",
-    "TOKEN_COOKIE_EXPIRES": 7,
     "MESSAGE_RECEIVED_MP3": "message-received.mp3"
   },
   "LABELS": {
@@ -48,7 +44,7 @@
     }
   },
   "API": {
-    "ROOT": "https://alora-chat-backend.herokuapp.com",
+    "URL": "https://alora-chat-backend.herokuapp.com",
     "ACTIONS": {
       "AUTH_SIGNUP": "/auth/signup",
       "AUTH_SIGNIN": "/auth/signin",
