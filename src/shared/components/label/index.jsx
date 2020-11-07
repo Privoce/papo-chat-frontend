@@ -54,12 +54,13 @@ function LabelComponent({
   }
 
   function drawText(string) {
-    if (!string) {
+    if (!string || !Number.isNaN(string)) {
       return string;
     }
 
     if (isValidURL(string)) {
       // get the start of url (http(s) or www)
+
       const start =
         string.search('http') > 0
           ? string.search('http')
