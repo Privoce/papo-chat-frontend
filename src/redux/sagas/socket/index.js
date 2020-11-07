@@ -15,7 +15,7 @@ let socket;
 let socketTask;
 
 function connectSocket() {
-  const socket = io(constants.API.ROOT);
+  const socket = io(process.env.ROOT);
   return new Promise((resolve) => {
     socket.on('connect', () => {
       resolve(socket);
@@ -33,7 +33,7 @@ function subscribe(socket) {
 
       const sound = new Howl({
         src: [
-          `${process.env.PUBLIC_URL}${constants.GLOBAL.MESSAGE_RECEIVED_MP3}`,
+          `${process.env.PUBLIC_URL}${process.env.MESSAGE_RECEIVED_MP3}`,
         ],
       });
 

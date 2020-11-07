@@ -19,8 +19,8 @@ function* sendMessagePostFetchSaga(action) {
 
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
-			method: constants.API.METHODS.POST,
+			url: `${process.env.ROOT}${process.env.ACTIONS.MESSAGE}`,
+			method: process.env.METHODS.POST,
 			body
 		});
 
@@ -52,8 +52,8 @@ function* getMessagesFetchSaga(action) {
 
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
-			method: constants.API.METHODS.GET,
+			url: `${process.env.ROOT}${process.env.ACTIONS.MESSAGE}`,
+			method: process.env.METHODS.GET,
 			query
 		});
 
@@ -80,8 +80,8 @@ function* deleteMessageFetchSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
-			method: constants.API.METHODS.DELETE,
+			url: `${process.env.ROOT}${process.env.ACTIONS.MESSAGE}`,
+			method: process.env.METHODS.DELETE,
 			body
 		});
 
