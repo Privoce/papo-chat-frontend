@@ -44,7 +44,6 @@
     }
   },
   "API": {
-    "URL": "https://api.privoce.com",
     "ACTIONS": {
       "AUTH_SIGNUP": "/auth/signup",
       "AUTH_SIGNIN": "/auth/signin",

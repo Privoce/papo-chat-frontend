@@ -17,7 +17,7 @@ export function isDevelopmentEnv() {
 }
 
 export function setCookie(key, value, expires) {
-  return Cookies.set(key, value, { expires });
+  return Cookies.set(key, value, { expires: Number(expires) });
 }
 
 export function removeCookie(key) {
