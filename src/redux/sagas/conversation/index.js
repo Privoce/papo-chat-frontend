@@ -18,7 +18,7 @@ import constants from "modules/constants";
 function* getConversationsFetch() {
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.CONVERSATION}`,
 			method: constants.API.METHODS.GET
 		});
 
@@ -49,7 +49,7 @@ function* resetConversationUnreadtMessagesSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.CONVERSATION}`,
 			method: constants.API.METHODS.PUT,
 			body
 		});
@@ -81,7 +81,7 @@ function* deleteConversationFetchSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.CONVERSATION}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.CONVERSATION}`,
 			method: constants.API.METHODS.DELETE,
 			body
 		});
