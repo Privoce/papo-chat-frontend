@@ -15,7 +15,7 @@ let socket;
 let socketTask;
 
 function connectSocket() {
-  const socket = io(process.env.REACT_APP_URL);
+  const socket = io(constants.API.ROOT);
   return new Promise((resolve) => {
     socket.on('connect', () => {
       resolve(socket);
