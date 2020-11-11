@@ -19,7 +19,7 @@ function* sendMessagePostFetchSaga(action) {
 
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.MESSAGE}`,
 			method: constants.API.METHODS.POST,
 			body
 		});
@@ -52,7 +52,7 @@ function* getMessagesFetchSaga(action) {
 
 	try {
 		const response = yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.MESSAGE}`,
 			method: constants.API.METHODS.GET,
 			query
 		});
@@ -80,7 +80,7 @@ function* deleteMessageFetchSaga(action) {
 
 	try {
 		yield sendRequest({
-			url: `${constants.API.ROOT}${constants.API.ACTIONS.MESSAGE}`,
+			url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.MESSAGE}`,
 			method: constants.API.METHODS.DELETE,
 			body
 		});
