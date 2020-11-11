@@ -17,7 +17,7 @@ class PeerConnection extends Emitter {
   constructor(friendID) {
     super();
     this.pc = new RTCPeerConnection(PC_CONFIG);
-    this.socket = io(process.env.REACT_APP_URL);
+    this.socket = io(constants.API.ROOT);
     this.pc.onicecandidate = (event) => {
       this.socket.emit('call', {
         to: this.friendID,
