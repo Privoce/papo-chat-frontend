@@ -17,7 +17,7 @@ export function isDevelopmentEnv() {
 }
 
 export function setCookie(key, value, expires) {
-  return Cookies.set(key, value, { expires: Number(expires) });
+  return Cookies.set(key, value, { expires });
 }
 
 export function removeCookie(key) {
@@ -34,34 +34,34 @@ export function getCookie(key) {
 
 export function setToken(value) {
   return setCookie(
-    process.env.REACT_APP_TOKEN_COOKIE_KEY,
+    constants.GLOBAL.TOKEN_COOKIE_KEY,
     value,
-    process.env.REACT_APP_TOKEN_COOKIE_EXPIRES
+    constants.GLOBAL.TOKEN_COOKIE_EXPIRES
   );
 }
 
 export function setUser(value) {
   return setCookie(
-    process.env.REACT_APP_USER_COOKIE_KEY,
+    constants.GLOBAL.USER_COOKIE_KEY,
     value,
-    process.env.REACT_APP_USER_COOKIE_EXPIRES
+    constants.GLOBAL.USER_COOKIE_EXPIRES
   );
 }
 
 export function getToken() {
-  return getCookieJson(process.env.REACT_APP_TOKEN_COOKIE_KEY);
+  return getCookieJson(constants.GLOBAL.TOKEN_COOKIE_KEY);
 }
 
 export function getUser() {
-  return getCookieJson(process.env.REACT_APP_USER_COOKIE_KEY);
+  return getCookieJson(constants.GLOBAL.USER_COOKIE_KEY);
 }
 
 export function removeToken() {
-  return removeCookie(process.env.REACT_APP_TOKEN_COOKIE_KEY);
+  return removeCookie(constants.GLOBAL.TOKEN_COOKIE_KEY);
 }
 
 export function removeUser() {
-  return removeCookie(process.env.REACT_APP_USER_COOKIE_KEY);
+  return removeCookie(constants.GLOBAL.USER_COOKIE_KEY);
 }
 
 export function createAcronym(param) {
