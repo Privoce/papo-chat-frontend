@@ -9,6 +9,9 @@ import {
   POST_SIGNUP,
   POST_SIGNIN,
   GET_VERIFY_NICKNAME,
+  POST_SIGNUP_GOOGLE,
+  POST_SIGNIN_GOOGLE,
+  POST_SIGNUP_GOOGLE_RECEIVED,
 } from 'redux/constants/auth';
 
 function* signInPostFetch(props) {
@@ -18,7 +21,7 @@ function* signInPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.AUTH_SIGNIN}`,
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/signin`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -35,6 +38,35 @@ function* signInPostFetch(props) {
   } catch (e) {
     yield put(authActions.postSignInReceived());
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
+  }
+}
+
+function* signInGooglePostFetch() {
+  try {
+    yield sendRequest({
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/google`,
+      method: constants.API.METHODS.GET,
+    });
+  } catch (e) {
+    toast.error('Error on social login');
+  }
+}
+
+// set login infos after google callback
+function* signInGoogleReturn(token) {
+  try {
+    const response = yield sendRequest({
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/me`,
+      method: constants.API.METHODS.GET,
+      forceToken: token,
+    });
+
+    if (response.user) {
+      login(response.token, response.user);
+    }
+  } catch (e) {
+    console.log(e);
+    toast.error('Error on social login callback');
   }
 }
 
@@ -102,6 +134,8 @@ const sagas = [
   takeLatest(POST_SIGNIN, signInPostFetch),
   takeLatest(POST_SIGNUP, signUpPostFetch),
   takeLatest(GET_VERIFY_NICKNAME, verifyNicknameGetFetch),
+  takeLatest(POST_SIGNIN_GOOGLE, signInGooglePostFetch),
+  takeLatest(POST_SIGNUP_GOOGLE_RECEIVED, signInGoogleReturn),
 ];
 
 export default sagas;

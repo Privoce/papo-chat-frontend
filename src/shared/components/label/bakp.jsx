@@ -20,7 +20,7 @@ do {
       : string.length;
 
   stringTmp = stringTmp.slice(start + end);
-  //console.log(stringTmp, start)
+
   if (start > 0) {
     startIndex.push(start);
     endIndex.push(end + start);
@@ -29,9 +29,7 @@ do {
   }
 } while (!check);
 
-console.log('urls encontradas:');
 let stringRender = string;
 startIndex.forEach((el, i) => {
-  console.log(stringRender.slice(el, endIndex[i]));
   stringRender = stringRender.slice(endIndex[i]);
 });

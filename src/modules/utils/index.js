@@ -93,13 +93,13 @@ export async function login(token, user) {
   await history.push('/');
 }
 
-export async function sendRequest({ url, method, body, query }) {
+export async function sendRequest({ url, method, body, query, forceToken }) {
   const token = getToken();
   const fetchParams = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'x-access-token': token,
+      'x-access-token': token || forceToken.params,
     },
     body,
   };

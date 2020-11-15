@@ -38,6 +38,10 @@ class SignInFormContainer extends Component {
 
     const { errors } = signIn;
 
+    function handleGoogleAuth() {
+      window.location.href = `${process.env.REACT_APP_AUTH_URL}/auth/google`;
+    }
+
     return (
       <FormComponent
         formName="SignInForm"
@@ -56,57 +60,60 @@ class SignInFormContainer extends Component {
         }}
         render={({ handleChange, handleSubmit, form }) => {
           return (
-            <form onSubmit={handleSubmit}>
-              {errors.nickname ? (
-                <FlashMessageComponent
+            <>
+              <form onSubmit={handleSubmit}>
+                {errors.nickname ? (
+                  <FlashMessageComponent
+                    width={280}
+                    margin="10px 0px"
+                    message={errors.nickname}
+                    onClose={this.onCloseFlashMessage}
+                    error
+                  />
+                ) : null}
+                <InputComponent
+                  name="nickname"
+                  placeholder={constants.LABELS.AUTH.NICKNAME}
+                  type="text"
+                  autoComplete="off"
+                  onChange={handleChange}
+                  maxLength={12}
+                  margin="13px 0px 13px 0px"
                   width={280}
-                  margin="10px 0px"
-                  message={errors.nickname}
-                  onClose={this.onCloseFlashMessage}
-                  error
+                  defaultButton
                 />
-              ) : null}
-              <InputComponent
-                name="nickname"
-                placeholder={constants.LABELS.AUTH.NICKNAME}
-                type="text"
-                autoComplete="off"
-                onChange={handleChange}
-                maxLength={12}
-                margin="13px 0px 13px 0px"
-                width={280}
-                defaultButton
-              />
-              <InputComponent
-                name="password"
-                placeholder={constants.LABELS.AUTH.PASSWORD}
-                type="password"
-                autoComplete="off"
-                onChange={handleChange}
-                maxLength={12}
-                margin="13px 0px 13px 0px"
-                width={280}
-                defaultButton
-              />
-              <ButtonComponent
-                type="submit"
-                primary
-                text="Sign In"
-                isFetching={signIn.isFetching}
-                margin="24px 0px 0px 0px"
-                width={280}
-                disabled={false}
-              />
+                <InputComponent
+                  name="password"
+                  placeholder={constants.LABELS.AUTH.PASSWORD}
+                  type="password"
+                  autoComplete="off"
+                  onChange={handleChange}
+                  maxLength={12}
+                  margin="13px 0px 13px 0px"
+                  width={280}
+                  defaultButton
+                />
+                <ButtonComponent
+                  type="submit"
+                  primary
+                  text="Sign In"
+                  isFetching={signIn.isFetching}
+                  margin="24px 0px 0px 0px"
+                  width={280}
+                  disabled={false}
+                />
+              </form>
               <p className="social-buttons--label">- or -</p>
               <FacebookLoginButton
                 style={{ margin: 0, marginTop: 10, width: '100%' }}
-                disabled
               />
 
               <GoogleLoginButton
                 style={{ margin: 0, marginTop: 10, width: '100%' }}
+                onClick={handleGoogleAuth}
+                preventActiveStyles
               />
-            </form>
+            </>
           );
         }}
       />
