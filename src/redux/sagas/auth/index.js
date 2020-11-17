@@ -8,8 +8,7 @@ import * as formActions from 'redux/actions/form';
 import {
   POST_SIGNUP,
   POST_SIGNIN,
-  GET_VERIFY_NICKNAME,
-  POST_SIGNUP_GOOGLE,
+  GET_VERIFY_EMAIL,
   POST_SIGNIN_GOOGLE,
   POST_SIGNUP_GOOGLE_RECEIVED,
 } from 'redux/constants/auth';
@@ -37,6 +36,7 @@ function* signInPostFetch(props) {
     }
   } catch (e) {
     yield put(authActions.postSignInReceived());
+    console.log(e);
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
   }
 }
@@ -77,7 +77,7 @@ function* signUpPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.AUTH_SIGNUP}`,
+      url: `${process.env.REACT_APP_AUTH_URL}${constants.API.ACTIONS.AUTH_SIGNUP}`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -107,7 +107,7 @@ function* verifyNicknameGetFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${process.env.REACT_APP_URL}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
+      url: `${process.env.REACT_APP_AUTH_URL}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
       method: constants.API.METHODS.GET,
       query: body,
     });
@@ -119,13 +119,12 @@ function* verifyNicknameGetFetch(props) {
     );
 
     yield put(
-      authActions.getVerifyNicknameReceived({
+      authActions.getVerifyEmailReceived({
         errors: response.errors,
       })
     );
   } catch (e) {
-    console.log(e);
-    yield put(authActions.getVerifyNicknameReceived());
+    yield put(authActions.getVerifyEmailReceived());
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
   }
 }
@@ -133,7 +132,7 @@ function* verifyNicknameGetFetch(props) {
 const sagas = [
   takeLatest(POST_SIGNIN, signInPostFetch),
   takeLatest(POST_SIGNUP, signUpPostFetch),
-  takeLatest(GET_VERIFY_NICKNAME, verifyNicknameGetFetch),
+  takeLatest(GET_VERIFY_EMAIL, verifyNicknameGetFetch),
   takeLatest(POST_SIGNIN_GOOGLE, signInGooglePostFetch),
   takeLatest(POST_SIGNUP_GOOGLE_RECEIVED, signInGoogleReturn),
 ];

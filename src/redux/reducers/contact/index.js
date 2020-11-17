@@ -9,7 +9,6 @@ import {
   DELETE_CONTACT_RECEIVED,
   REMOVE_CONTACT,
 } from 'redux/constants/contact';
-
 import { RESET } from 'redux/constants/main';
 
 const initialState = {

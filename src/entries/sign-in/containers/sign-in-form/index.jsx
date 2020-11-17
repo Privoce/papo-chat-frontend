@@ -46,7 +46,7 @@ class SignInFormContainer extends Component {
       <FormComponent
         formName="SignInForm"
         values={{
-          nickname: '',
+          email: '',
           password: '',
         }}
         handleSubmit={(values) => {
@@ -62,22 +62,22 @@ class SignInFormContainer extends Component {
           return (
             <>
               <form onSubmit={handleSubmit}>
-                {errors.nickname ? (
+                {errors.email ? (
                   <FlashMessageComponent
                     width={280}
                     margin="10px 0px"
-                    message={errors.nickname}
+                    message={errors.email}
                     onClose={this.onCloseFlashMessage}
                     error
                   />
                 ) : null}
                 <InputComponent
-                  name="nickname"
-                  placeholder={constants.LABELS.AUTH.NICKNAME}
+                  name="email"
+                  placeholder={constants.LABELS.AUTH.EMAIL}
                   type="text"
                   autoComplete="off"
                   onChange={handleChange}
-                  maxLength={12}
+                  maxLength={22}
                   margin="13px 0px 13px 0px"
                   width={280}
                   defaultButton

@@ -3,9 +3,9 @@ import {
   POST_SIGNUP_RECEIVED,
   POST_SIGNIN,
   POST_SIGNIN_RECEIVED,
-  GET_VERIFY_NICKNAME,
-  GET_VERIFY_NICKNAME_RECEIVED,
-  RESET_VERIFY_NICKNAME,
+  GET_VERIFY_EMAIL,
+  GET_VERIFY_EMAIL_RECEIVED,
+  RESET_VERIFY_EMAIL,
   RESET_SIGNIN,
   POST_SIGNIN_GOOGLE,
   POST_SIGNUP_GOOGLE_RECEIVED,
@@ -59,22 +59,22 @@ export function postSignUpReceived(params) {
   };
 }
 
-export function getVerifyNickname(params) {
+export function getVerifyEmail(params) {
   return {
-    type: GET_VERIFY_NICKNAME,
+    type: GET_VERIFY_EMAIL,
     params,
   };
 }
 
-export function getVerifyNicknameReceived(params) {
+export function getVerifyEmailReceived(params) {
   return {
-    type: GET_VERIFY_NICKNAME_RECEIVED,
+    type: GET_VERIFY_EMAIL_RECEIVED,
     params,
   };
 }
 
-export function resetVerifyNickname() {
+export function resetVerifyEmail() {
   return {
-    type: RESET_VERIFY_NICKNAME,
+    type: RESET_VERIFY_EMAIL,
   };
 }

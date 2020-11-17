@@ -95,11 +95,16 @@ export async function login(token, user) {
 
 export async function sendRequest({ url, method, body, query, forceToken }) {
   const token = getToken();
+
+  let newToken = '';
+  if (forceToken) {
+    newToken = forceToken.params;
+  }
   const fetchParams = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'x-access-token': token || forceToken.params,
+      'x-access-token': token || newToken,
     },
     body,
   };
@@ -112,6 +117,8 @@ export async function sendRequest({ url, method, body, query, forceToken }) {
     query ? `${url}?${queryString.stringify(query)}` : url,
     fetchParams
   );
+
+  console.log(result);
 
   switch (result.status) {
     case 401:
