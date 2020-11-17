@@ -104,9 +104,9 @@ class SignInFormContainer extends Component {
                 />
               </form>
               <p className="social-buttons--label">- or -</p>
-              <FacebookLoginButton
+              {/* <FacebookLoginButton
                 style={{ margin: 0, marginTop: 10, width: '100%' }}
-              />
+              /> */}
 
               <GoogleLoginButton
                 style={{ margin: 0, marginTop: 10, width: '100%' }}
