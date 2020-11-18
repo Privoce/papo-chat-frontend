@@ -18,15 +18,21 @@ class SignUpFormContainer extends Component {
   render() {
     const { authActions, authData } = this.props;
 
-    const { getVerifyNickname, postSignUp } = authActions;
+    const { getVerifyEmail, postSignUp } = authActions;
 
-    const { verifyNickname, signUp } = authData;
+    const { verifyEmail, signUp } = authData;
+
+    function validateEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
 
     return (
       <FormComponent
         formName="SignUpForm"
         values={{
           nickname: '',
+          email: '',
           password: '',
           confirmPassword: '',
         }}
@@ -40,9 +46,23 @@ class SignUpFormContainer extends Component {
           }
         }}
         validate={(values, errors, resetErrors, keys) => {
-          const { confirmPassword, nickname, password } = values;
+          const { confirmPassword, nickname, password, email } = values;
 
           const newErrors = errors;
+
+          if (_.includes(keys, 'email')) {
+            if (resetErrors) {
+              delete newErrors.email;
+            }
+            if (!email) {
+              newErrors.email = constants.LABELS.AUTH.PLEASE_ENTER_YOUR_EMAIL;
+            } else if (email.length < 10 || email.length > 100) {
+              newErrors.email =
+                constants.LABELS.AUTH.EMAIL_LENGHT_BETWEEN_2_AND_12;
+            } else if (!validateEmail(email)) {
+              newErrors.email = 'Insert a valid email';
+            }
+          }
 
           if (_.includes(keys, 'nickname')) {
             if (resetErrors) {
@@ -84,21 +104,21 @@ class SignUpFormContainer extends Component {
           return newErrors;
         }}
         validateAsync={(key, value, formName) => {
-          if (key === 'nickname') {
+          if (key === 'email') {
             const params = {
               body: {
-                nickname: value,
+                email: value,
               },
               formName,
             };
 
-            getVerifyNickname({
+            getVerifyEmail({
               ...params,
             });
           }
         }}
         debounceValidation={{
-          nickname: 300,
+          email: 300,
         }}
         render={({
           handleChange,
@@ -112,28 +132,28 @@ class SignUpFormContainer extends Component {
           return (
             <form onSubmit={handleSubmit}>
               <InputComponent
-                name="nickname"
-                placeholder={constants.LABELS.AUTH.NICKNAME}
+                name="email"
+                placeholder={constants.LABELS.AUTH.EMAIL}
                 type="text"
-                hasError={touched.nickname && errors.nickname}
-                errorMessage={errors.nickname}
+                hasError={touched.email && errors.email}
+                errorMessage={errors.email}
                 autoComplete="off"
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 margin="13px 0px 13px 0px"
-                maxLength={12}
+                maxLength={100}
                 width={280}
                 defaultButton
                 iconRight
                 iconComponent={() => {
-                  if (values.nickname) {
-                    if (values.nickname.length > 0) {
-                      if (verifyNickname.isFetching) {
+                  if (values.email) {
+                    if (values.email.length > 0) {
+                      if (verifyEmail.isFetching) {
                         return <LoadingComponent type="donut" />;
                       }
 
-                      if (!_.isEmpty(verifyNickname.errors)) {
+                      if (!_.isEmpty(verifyEmail.errors)) {
                         return (
                           <IconComponent
                             fill="#da7079"
@@ -144,7 +164,7 @@ class SignUpFormContainer extends Component {
                         );
                       }
 
-                      if (!(touched.nickname && errors.nickname)) {
+                      if (!(touched.email && errors.email)) {
                         return (
                           <IconComponent
                             fill="#55c37c"
@@ -159,6 +179,21 @@ class SignUpFormContainer extends Component {
 
                   return null;
                 }}
+              />
+              <InputComponent
+                name="nickname"
+                placeholder={constants.LABELS.AUTH.NICKNAME}
+                type="text"
+                hasError={touched.nickname && errors.nickname}
+                errorMessage={errors.nickname}
+                autoComplete="off"
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                margin="13px 0px 13px 0px"
+                maxLength={12}
+                width={280}
+                defaultButton
               />
               <InputComponent
                 name="password"
@@ -195,7 +230,7 @@ class SignUpFormContainer extends Component {
                 primary
                 text={constants.LABELS.AUTH.SIGNUP}
                 isFetching={signUp.isFetching}
-                disabled={verifyNickname.isFetching}
+                disabled={verifyEmail.isFetching}
                 margin="24px 0px 0px 0px"
                 width={280}
               />

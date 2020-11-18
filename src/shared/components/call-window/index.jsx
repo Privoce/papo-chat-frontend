@@ -37,7 +37,6 @@ function CallWindow({
     }
 
     videoCallData.socket.on('toggle-video', (data) => {
-      console.log('caboclo fez', data);
       if (data.status) {
         setClientVideo(true);
       } else {

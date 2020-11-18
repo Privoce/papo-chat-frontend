@@ -34,7 +34,7 @@ function AddContactDrawer() {
         <FormComponent
           formName="AddContactForm"
           values={{
-            nickname: '',
+            email: '',
           }}
           handleSubmit={(values) => {
             if (!addContact.isFetching) {
@@ -50,31 +50,31 @@ function AddContactDrawer() {
 
             return (
               <form onSubmit={handleSubmit}>
-                {successMessages.nickname ? (
+                {successMessages.email ? (
                   <FlashMessageComponent
                     width="100%"
-                    message={successMessages.nickname}
+                    message={successMessages.email}
                     margin="0px 0px 15px 0px"
                     onClose={onCloseFlashMessage}
                     success
                   />
                 ) : null}
-                {errors.nickname ? (
+                {errors.email ? (
                   <FlashMessageComponent
                     width="100%"
-                    message={errors.nickname}
+                    message={errors.email}
                     margin="0px 0px 15px 0px"
                     onClose={onCloseFlashMessage}
                     error
                   />
                 ) : null}
                 <InputComponent
-                  name="nickname"
+                  name="email"
                   type="text"
                   autoComplete="off"
-                  placeholder={constants.LABELS.AUTH.NICKNAME}
+                  placeholder={constants.LABELS.AUTH.EMAIL}
                   onChange={handleChange}
-                  maxLength={12}
+                  maxLength={22}
                   defaultButton
                   margin="0px 0px 15px 0px"
                 />
@@ -83,7 +83,7 @@ function AddContactDrawer() {
                   primary
                   text={constants.LABELS.CHAT.ADD}
                   width="100%"
-                  disabled={!values.nickname}
+                  disabled={!values.email}
                   isFetching={addContact.isFetching}
                 />
               </form>
