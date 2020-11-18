@@ -8,7 +8,9 @@ import * as formActions from 'redux/actions/form';
 import {
   POST_SIGNUP,
   POST_SIGNIN,
-  GET_VERIFY_NICKNAME,
+  GET_VERIFY_EMAIL,
+  POST_SIGNIN_GOOGLE,
+  POST_SIGNUP_GOOGLE_RECEIVED,
 } from 'redux/constants/auth';
 
 function* signInPostFetch(props) {
@@ -18,7 +20,7 @@ function* signInPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.AUTH_SIGNIN}`,
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/signin`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -34,7 +36,37 @@ function* signInPostFetch(props) {
     }
   } catch (e) {
     yield put(authActions.postSignInReceived());
+    console.log(e);
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
+  }
+}
+
+function* signInGooglePostFetch() {
+  try {
+    yield sendRequest({
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/google`,
+      method: constants.API.METHODS.GET,
+    });
+  } catch (e) {
+    toast.error('Error on social login');
+  }
+}
+
+// set login infos after google callback
+function* signInGoogleReturn(token) {
+  try {
+    const response = yield sendRequest({
+      url: `${process.env.REACT_APP_AUTH_URL}/auth/me`,
+      method: constants.API.METHODS.GET,
+      forceToken: token,
+    });
+
+    if (response.user) {
+      login(response.token, response.user);
+    }
+  } catch (e) {
+    console.log(e);
+    toast.error('Error on social login callback');
   }
 }
 
@@ -45,7 +77,7 @@ function* signUpPostFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.AUTH_SIGNUP}`,
+      url: `${process.env.REACT_APP_AUTH_URL}${constants.API.ACTIONS.AUTH_SIGNUP}`,
       method: constants.API.METHODS.POST,
       body,
     });
@@ -75,7 +107,7 @@ function* verifyNicknameGetFetch(props) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
+      url: `${process.env.REACT_APP_AUTH_URL}${constants.API.ACTIONS.VERIFY_NICKNAME}`,
       method: constants.API.METHODS.GET,
       query: body,
     });
@@ -87,13 +119,12 @@ function* verifyNicknameGetFetch(props) {
     );
 
     yield put(
-      authActions.getVerifyNicknameReceived({
+      authActions.getVerifyEmailReceived({
         errors: response.errors,
       })
     );
   } catch (e) {
-    console.log(e);
-    yield put(authActions.getVerifyNicknameReceived());
+    yield put(authActions.getVerifyEmailReceived());
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
   }
 }
@@ -101,7 +132,9 @@ function* verifyNicknameGetFetch(props) {
 const sagas = [
   takeLatest(POST_SIGNIN, signInPostFetch),
   takeLatest(POST_SIGNUP, signUpPostFetch),
-  takeLatest(GET_VERIFY_NICKNAME, verifyNicknameGetFetch),
+  takeLatest(GET_VERIFY_EMAIL, verifyNicknameGetFetch),
+  takeLatest(POST_SIGNIN_GOOGLE, signInGooglePostFetch),
+  takeLatest(POST_SIGNUP_GOOGLE_RECEIVED, signInGoogleReturn),
 ];
 
 export default sagas;

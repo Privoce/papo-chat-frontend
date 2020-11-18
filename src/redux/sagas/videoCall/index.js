@@ -18,7 +18,7 @@ function* aceptVideoCall(action) {
 
   try {
     const response = yield sendRequest({
-      url: `${constants.API.ROOT}/secured/videoCall-acept`,
+      url: `${process.env.REACT_APP_URL}papo/secured/videoCall-acept`,
       method: constants.API.METHODS.POST,
       body,
     });

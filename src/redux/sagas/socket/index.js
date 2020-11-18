@@ -102,6 +102,7 @@ function* startChanelSaga() {
     yield put(socketActions.serverOn());
     socketTask = yield fork(handleIO, socket);
   } catch (e) {
+    console.log(e);
     toast.error(constants.LABELS.MAIN.GLOBAL_ERROR);
   }
 }

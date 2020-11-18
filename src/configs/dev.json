@@ -14,7 +14,8 @@
       "YES": "yes"
     },
     "AUTH": {
-      "NICKNAME": "Username",
+      "NICKNAME": "Name",
+      "EMAIL": "Email",
       "PASSWORD": "Password",
       "CONFIRM_PASSWORD": "Confirm password",
       "ALREADY_HAVE_ACCOUNT": "Already have an account?",
@@ -22,9 +23,11 @@
       "SIGNIN": "Papo Chat",
       "SIGNUP": "Sign Up",
       "PLEASE_ENTER_YOUR_PASSWORD": "Please, enter your password",
-      "PLEASE_ENTER_YOUR_NICKNAME": "Please, enter your nickname",
+      "PLEASE_ENTER_YOUR_NICKNAME": "Please, enter your name",
+      "PLEASE_ENTER_YOUR_EMAIL": "Please, enter your email",
       "PLEASE_CONFIRM_PASSWORD": "Please, confirm your password",
-      "NICKNAME_LENGHT_BETWEEN_2_AND_12": "The Nickname must have between 2 and 12 characters",
+      "NICKNAME_LENGHT_BETWEEN_2_AND_12": "The name must have between 2 and 12 characters",
+      "EMAIL_LENGHT_BETWEEN_2_AND_12": "The email must have between 10 and 100 characters",
       "PASSWORD_LENGHT_BETWEEN_5_AND_12": "The Password must have between 5 and 12 characters",
       "PASSWORD_DOESNT_MATCH": "Password and confirm password must match"
     },
@@ -52,7 +55,7 @@
     "ACTIONS": {
       "AUTH_SIGNUP": "/auth/signup",
       "AUTH_SIGNIN": "/auth/signin",
-      "VERIFY_NICKNAME": "/auth/verify-nickname",
+      "VERIFY_NICKNAME": "/auth/verify-email",
       "CONTACT": "/secured/contact",
       "MESSAGE": "/secured/message",
       "CONVERSATION": "/secured/conversation"

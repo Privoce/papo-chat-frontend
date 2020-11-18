@@ -31,8 +31,8 @@ function StartCallWindow({
 
   return (
     <div className="start-call-container">
-      <h2>{currentUser.nickname || 'Usuario'}</h2>
-      <p>Incoming Call</p>
+      <h2>{currentUser.nickname || 'User'}</h2>
+      <p>Make a call</p>
       <img src={image || placeholderImg} alt="User profile" />
       <div className="button-container">
         <button className="button-cancelcall" type="button" onClick={cancel}>
