@@ -12,7 +12,6 @@
 
 </div>
 
-<hr>
 <bR>
 
 <p align="center">
