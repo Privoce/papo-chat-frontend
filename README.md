@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![](preview.png)
+<img src="preview.png" height="300"/>
 
 </div>
 
