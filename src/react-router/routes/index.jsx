@@ -1,57 +1,21 @@
 import React from 'react';
 
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Switch, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import { SignUpEntry, SignInEntry, ChatEntry, SocialAuthEntry } from 'entries';
-import { getToken } from 'modules/utils';
+import {
+  SignUpEntry,
+  SignInEntry,
+  ChatEntry,
+  SocialAuthEntry,
+  DirectCall,
+} from 'entries';
 import { AppContainer } from 'shared/containers';
 
+import CustomRoute from './components/CustomRoute';
+
 function RoutesContainer({ location }) {
-  const Workaround = ({ action, children }) =>
-    action === 'REPLACE' ? null : children;
-
-  const CustomRoute = ({ protectedRoute, component: Component, ...rest }) => {
-    return (
-      <Route
-        {...rest}
-        render={(props) => {
-          const { history } = props;
-
-          const token = getToken();
-
-          if (!token && protectedRoute) {
-            return (
-              <Workaround action={history.action}>
-                <Redirect
-                  to={{
-                    pathname: 'signin',
-                    state: { from: props.location },
-                  }}
-                />
-              </Workaround>
-            );
-          }
-
-          if (token && !protectedRoute) {
-            return (
-              <Workaround action={history.action}>
-                <Redirect
-                  to={{
-                    pathname: '/',
-                    state: { from: props.location },
-                  }}
-                />
-              </Workaround>
-            );
-          }
-
-          return <Component {...props} />;
-        }}
-      />
-    );
-  };
-
   return (
     <AppContainer>
       <TransitionGroup className="transition-group-container">
@@ -75,6 +39,11 @@ function RoutesContainer({ location }) {
                 path="/social/:token"
                 component={SocialAuthEntry}
               />
+              <CustomRoute
+                exact
+                path="/direct-call/:user"
+                component={DirectCall}
+              />
             </Switch>
           </section>
         </CSSTransition>
@@ -82,5 +51,11 @@ function RoutesContainer({ location }) {
     </AppContainer>
   );
 }
+
+RoutesContainer.propTypes = {
+  location: PropTypes.shape({
+    key: PropTypes.string,
+  }).isRequired,
+};
 
 export default withRouter(RoutesContainer);
