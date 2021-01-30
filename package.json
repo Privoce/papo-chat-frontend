@@ -1,5 +1,5 @@
 {
-  "name": "chatapp",
+  "name": "PapoChat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -66,11 +66,6 @@
     "build": "react-scripts build",
     "format": "prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx}\"",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "yarn build && mv build/index.html build/200.html && surge build https://react-socketio-nodejs-test-chatapp.surge.sh",
-    "teardown": "surge teardown https://react-socketio-nodejs-test-chatapp.surge.sh"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject"
   }
 }
