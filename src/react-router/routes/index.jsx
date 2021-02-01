@@ -9,8 +9,10 @@ import {
   SignInEntry,
   ChatEntry,
   SocialAuthEntry,
+  Page404,
   DirectCall,
 } from 'entries';
+
 import { AppContainer } from 'shared/containers';
 
 import CustomRoute from './components/CustomRoute';
@@ -39,11 +41,14 @@ function RoutesContainer({ location }) {
                 path="/social/:token"
                 component={SocialAuthEntry}
               />
+
+              <CustomRoute component={Page404} />
               <CustomRoute
                 exact
                 path="/direct-call/:user"
                 component={DirectCall}
               />
+              
             </Switch>
           </section>
         </CSSTransition>
