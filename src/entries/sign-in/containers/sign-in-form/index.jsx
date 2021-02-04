@@ -77,7 +77,7 @@ class SignInFormContainer extends Component {
                   type="text"
                   autoComplete="off"
                   onChange={handleChange}
-                  maxLength={22}
+                  maxLength={128}
                   margin="13px 0px 13px 0px"
                   width={280}
                   defaultButton
@@ -88,7 +88,7 @@ class SignInFormContainer extends Component {
                   type="password"
                   autoComplete="off"
                   onChange={handleChange}
-                  maxLength={12}
+                  maxLength={64}
                   margin="13px 0px 13px 0px"
                   width={280}
                   defaultButton

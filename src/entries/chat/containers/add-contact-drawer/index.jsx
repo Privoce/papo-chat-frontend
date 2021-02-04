@@ -74,7 +74,7 @@ function AddContactDrawer() {
                   autoComplete="off"
                   placeholder={constants.LABELS.AUTH.EMAIL}
                   onChange={handleChange}
-                  maxLength={22}
+                  maxLength={128}
                   defaultButton
                   margin="0px 0px 15px 0px"
                 />

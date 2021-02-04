@@ -4,7 +4,7 @@ import { InputComponent, IconComponent } from 'shared/components';
 import _ from 'lodash';
 
 export default class InputSearchComponent extends Component {
-  debounceChange = _.debounce(value => {
+  debounceChange = _.debounce((value) => {
     const { handleChange } = this.props;
 
     handleChange(value);
@@ -21,11 +21,11 @@ export default class InputSearchComponent extends Component {
         type="text"
         placeholder="Search..."
         autoComplete="off"
-        onChange={event => {
+        onChange={(event) => {
           const { value } = event.target;
           this.debounceChange(value);
         }}
-        maxLength={12}
+        maxLength={64}
         search
         iconComponent={() => {
           return (
